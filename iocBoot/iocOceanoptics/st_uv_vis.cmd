@@ -30,10 +30,11 @@ Oceanoptics_registerRecordDeviceDriver pdbbase
 #dbLoadTemplate "db/user.substitutions"
 dbLoadRecords "db/OceanopticsVersion.db", "user=chem_epics"
 #dbLoadRecords "db/dbSubExample.db", "user=chem_epics"
-dbLoadRecords "db/OceanopticsPV.db",    "P=15ID,D=UVVis"
-#dbLoadRecords "db/OceanopticsMCA.db",   "P=15ID,D=UVVis"  # requires drvSoftMca port
-dbLoadRecords "db/OceanopticsQEPro.db", "P=15ID,D=UVVis"
-dbLoadRecords "db/OceanopticsHDF5.db",  "P=15ID,D=UVVis"
+dbLoadRecords "db/OceanopticsPV.db",        "P=15ID,D=UVVis"
+#dbLoadRecords "db/OceanopticsMCA.db",      "P=15ID,D=UVVis"  # requires drvSoftMca port
+dbLoadRecords "db/OceanopticsMCA_pydev.db", "P=15ID,D=UVVis"  # MCA-compatible, no drvSoftMca needed
+dbLoadRecords "db/OceanopticsQEPro.db",    "P=15ID,D=UVVis"
+dbLoadRecords "db/OceanopticsHDF5.db",     "P=15ID,D=UVVis"
 
 
 

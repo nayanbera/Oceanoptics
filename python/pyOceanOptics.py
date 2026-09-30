@@ -1019,6 +1019,61 @@ def hdf_get_attr_exposure_mode():
 
 
 # ==================================================================
+# MCA-compatible pydev records (OceanopticsMCA_pydev.db)
+# No drvSoftMca needed — all backed by Python.
+# ==================================================================
+
+_N_MCA_ROIS = 8
+_mca_roi_lo   = [0]   * _N_MCA_ROIS
+_mca_roi_hi   = [0]   * _N_MCA_ROIS
+_mca_roi_name = ['ROI %d' % i for i in range(_N_MCA_ROIS)]
+_mca_calo = 0.0   # energy cal offset (eV at channel 0)
+_mca_cals = 1.0   # energy cal slope  (eV / channel)
+_mca_acq_start = None  # time.monotonic() when last spectrum was triggered
+
+
+def mca_get_roi_counts(idx):
+    idx = int(idx)
+    lo = _mca_roi_lo[idx]
+    hi = _mca_roi_hi[idx]
+    if hi <= lo:
+        return 0.0
+    arr = np.asarray(spectrum, dtype=float)
+    lo = max(0, min(lo, arr.size))
+    hi = max(lo, min(hi, arr.size))
+    return float(np.sum(arr[lo:hi]))
+
+def mca_set_roi_lo(idx, val):
+    _mca_roi_lo[int(idx)] = int(val)
+
+def mca_set_roi_hi(idx, val):
+    _mca_roi_hi[int(idx)] = int(val)
+
+def mca_set_roi_name(idx, val):
+    _mca_roi_name[int(idx)] = str(val).strip('\x00')
+
+def mca_set_calo(val):
+    global _mca_calo
+    _mca_calo = float(val)
+
+def mca_set_cals(val):
+    global _mca_cals
+    _mca_cals = float(val)
+
+def mca_get_ertm():
+    """Elapsed real time: integration_time * scans_to_average (seconds)."""
+    return _cached_itime * 1e-6 * max(1, _cached_nscans)
+
+def mca_get_eltm():
+    """Live time approximation — same as real time for this detector."""
+    return mca_get_ertm()
+
+def mca_get_acqg():
+    """Always 0 (Done) — QEPro is synchronous, never mid-acquisition here."""
+    return 0
+
+
+# ==================================================================
 # MCA bridge -- push spectrum into drvSoftMca via loopback CA
 # ==================================================================
 # Initialized lazily after iocInit so the CA server is running.
@@ -1032,7 +1087,14 @@ _mca_init_tried = False
 
 
 def _update_mca(data):
-    """Non-blocking push of spectrum array into the MCA1 mca record."""
+    """Non-blocking CA push of spectrum into the MCA1 waveform record.
+
+    Now targets the pydev MCA1 waveform (OceanopticsMCA_pydev.db) which
+    always exists, so the PV connects immediately after iocInit.
+    The global `spectrum` array is already updated by get_spectrum() before
+    this is called, so the push is redundant for local readers — it mainly
+    ensures any external CA monitors on MCA1 see the update.
+    """
     global _mca_pv, _mca_init_tried
     if _mca_init_tried and _mca_pv is None:
         return
@@ -1040,7 +1102,7 @@ def _update_mca(data):
         _mca_init_tried = True
         try:
             import epics
-            _mca_pv = epics.PV(ioc_prefix + "MCA1.VAL", auto_monitor=False)
+            _mca_pv = epics.PV(ioc_prefix + "MCA1", auto_monitor=False)
         except Exception:
             return
     if not _mca_pv.connected:

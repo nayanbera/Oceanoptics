@@ -16,6 +16,7 @@ DB += dbSubExample.db
 DB += user.substitutions
 DB += OceanopticsPV.db
 DB += OceanopticsMCA.db
+DB += OceanopticsMCA_pydev.db
 DB += OceanopticsQEPro.db
 DB += OceanopticsHDF5.db
 
