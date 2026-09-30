@@ -11,7 +11,12 @@ include $(PYDEVICE)/configure/CONFIG.PyDevice
 
 # Use typed rset structure (see 3.16.1 release notes)
 USR_CPPFLAGS += -DUSE_TYPED_RSET
-USR_LDFLAGS += -L/home/chem_epics/anaconda3/envs/pydm/lib
+# Point at the lib directory of the Python used by PyDevice.
+# Override in configure/CONFIG_SITE.local if needed, e.g.:
+#   USR_LDFLAGS += -L/opt/conda/envs/myenv/lib
+ifdef PYTHON_LIB_DIR
+USR_LDFLAGS += -L$(PYTHON_LIB_DIR)
+endif
 
 # xxxRecord.h will be created from xxxRecord.dbd
 DBDINC += xxxRecord

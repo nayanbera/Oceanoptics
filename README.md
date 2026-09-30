@@ -17,7 +17,7 @@ EPICS IOC for the Ocean Optics QEPro spectrometer, developed for the **15-ID ASW
 
 ```
 OceanopticsApp/Db/    EPICS record definitions (source)
-db/                   Built DB files (git-ignored)
+db/                   Built DB files (git-ignored build output)
 iocBoot/iocOceanoptics/
   st_uv_vis.cmd       IOC startup script for the QEPro UV-Vis
   hdf5_layout.xml     NeXus HDF5 layout XML
@@ -32,20 +32,92 @@ QEPro_Control.bob     PyDM BOB control panel
 
 ## Dependencies
 
-- EPICS base ≥ 7
-- [pydev](https://github.com/epicsdeb/pydev) — Python device support for EPICS
-- [OceanDirect SDK](https://www.oceanoptics.com/software/) — vendor Python SDK for QEPro
-- `h5py` — for HDF5 file writing (optional; plugin degrades gracefully without it)
-- `numpy`, `scipy`
+| Requirement | Notes |
+|---|---|
+| EPICS base ≥ 7 | |
+| [PyDevice](https://github.com/kasemir/PyDevice) | pydev device support — clone into `synApps/support/PyDevice` |
+| [MCA](https://github.com/epics-modules/mca) | Soft MCA record support |
+| [asyn](https://github.com/epics-modules/asyn) | Required by MCA |
+| OceanDirect SDK | Vendor Python SDK from Ocean Optics; provides `liboceandirect.so` |
+| `h5py`, `numpy`, `scipy` | Python packages in the PyDevice Python environment |
 
-## IOC startup
+---
+
+## Installation inside synApps/support
+
+### 1. Clone the repository
+
+```bash
+cd /path/to/synApps/support
+git clone https://github.com/nayanbera/Oceanoptics
+```
+
+### 2. Install the OceanDirect SDK
+
+Download the OceanDirect SDK from Ocean Optics and place the shared library where the Python package can find it:
+
+```bash
+cp /path/to/sdk/liboceandirect.so Oceanoptics/python/oceandirect/lib/
+```
+
+Install the required Python packages into the Python environment used by PyDevice:
+
+```bash
+pip install h5py numpy scipy
+```
+
+### 3. Edit `configure/RELEASE`
+
+Open `Oceanoptics/configure/RELEASE` and adjust the paths to match your synApps layout:
+
+```makefile
+SUPPORT = /path/to/synApps/support
+
+ASYN     = $(SUPPORT)/asyn-R4-44-2      # adjust version tag
+MCA      = $(SUPPORT)/mca-R7-10         # adjust version tag
+PYDEVICE = $(SUPPORT)/PyDevice
+
+EPICS_BASE = /usr/local/epics/base      # adjust to your EPICS base
+```
+
+### 4. Set the Python lib directory (optional)
+
+If the linker cannot find `libpythonX.Y.so` at build time, create `configure/CONFIG_SITE.local` and add:
+
+```makefile
+PYTHON_LIB_DIR = /path/to/conda/envs/your-env/lib
+```
+
+### 5. Build
+
+```bash
+cd Oceanoptics
+make
+```
+
+Build products go into `bin/`, `lib/`, `db/`, `dbd/` — all git-ignored.
+
+### 6. Configure the startup script
+
+Edit `iocBoot/iocOceanoptics/st_uv_vis.cmd`:
+
+```bash
+# Change the PV prefix to match your beamline
+pydev("ioc_prefix = 'XX:YY:'")
+```
+
+The USB device index (`odapi.open_device(2)` in `pyOceanOptics.py`) may also need adjusting — run `python -c "from oceandirect.OceanDirectAPI import OceanDirectAPI; a=OceanDirectAPI(); a.find_usb_devices(); print(a.get_device_ids())"` to list connected devices.
+
+### 7. Start the IOC
 
 ```bash
 cd iocBoot/iocOceanoptics
 ../../bin/linux-x86_64/Oceanoptics st_uv_vis.cmd
 ```
 
-PV prefix is `15ID:UVVis:` (set in `st_uv_vis.cmd`).
+PV prefix is set in `st_uv_vis.cmd` (default `15ID:UVVis:`).
+
+---
 
 ## HDF5 file plugin
 
