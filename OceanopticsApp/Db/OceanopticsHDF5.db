@@ -19,6 +19,7 @@ record(lso, "$(P):$(D):HDF1:FilePath")
     field(OUT,  "@hdf_set_filepath(VAL)")
     field(SCAN, "Passive")
     field(PINI, "YES")
+    field(FLNK, "$(P):$(D):HDF1:FilePath_RBV")
 }
 
 record(lsi, "$(P):$(D):HDF1:FilePath_RBV")
@@ -27,7 +28,7 @@ record(lsi, "$(P):$(D):HDF1:FilePath_RBV")
     field(DTYP, "pydev")
     field(SIZV, "512")
     field(INP,  "@hdf_get_filepath()")
-    field(SCAN, "1 second")
+    field(SCAN, "Passive")
     field(PINI, "YES")
 }
 
@@ -55,6 +56,7 @@ record(lso, "$(P):$(D):HDF1:FileName")
     field(OUT,  "@hdf_set_filename(VAL)")
     field(SCAN, "Passive")
     field(PINI, "YES")
+    field(FLNK, "$(P):$(D):HDF1:FileName_RBV")
 }
 
 record(lsi, "$(P):$(D):HDF1:FileName_RBV")
@@ -63,7 +65,7 @@ record(lsi, "$(P):$(D):HDF1:FileName_RBV")
     field(DTYP, "pydev")
     field(SIZV, "256")
     field(INP,  "@hdf_get_filename()")
-    field(SCAN, "1 second")
+    field(SCAN, "5 second")
     field(PINI, "YES")
 }
 
@@ -84,7 +86,7 @@ record(longin, "$(P):$(D):HDF1:FileNumber_RBV")
     field(DESC, "Next HDF5 file number readback")
     field(DTYP, "pydev")
     field(INP,  "@hdf_get_filenumber()")
-    field(SCAN, "1 second")
+    field(SCAN, "5 second")
 }
 
 record(bo, "$(P):$(D):HDF1:AutoIncrement")
@@ -134,7 +136,7 @@ record(lsi, "$(P):$(D):HDF1:FullFileName_RBV")
     field(DTYP, "pydev")
     field(SIZV, "512")
     field(INP,  "@hdf_get_fullfilename()")
-    field(SCAN, "1 second")
+    field(SCAN, "5 second")
 }
 
 # ------------------------------------------------------------------
@@ -194,7 +196,7 @@ record(longin, "$(P):$(D):HDF1:NumCaptured_RBV")
     field(DESC, "Frames captured so far")
     field(DTYP, "pydev")
     field(INP,  "@hdf_get_numcaptured()")
-    field(SCAN, "1 second")
+    field(SCAN, "5 second")
 }
 
 record(bo, "$(P):$(D):HDF1:Capture")
@@ -255,7 +257,7 @@ record(mbbi, "$(P):$(D):HDF1:WriteStatus_RBV")
     field(DESC, "HDF5 write status")
     field(DTYP, "pydev")
     field(INP,  "@hdf_get_write_status()")
-    field(SCAN, "1 second")
+    field(SCAN, "5 second")
     field(ZRST, "Idle")    field(ZRSV, "NO_ALARM")
     field(ONST, "Writing") field(ONSV, "MINOR")
     field(TWST, "Error")   field(TWSV, "MAJOR")
@@ -270,7 +272,7 @@ record(lsi, "$(P):$(D):HDF1:WriteMessage_RBV")
     field(DTYP, "pydev")
     field(SIZV, "512")
     field(INP,  "@hdf_get_write_message()")
-    field(SCAN, "1 second")
+    field(SCAN, "5 second")
 }
 
 record(bi, "$(P):$(D):HDF1:Available_RBV")

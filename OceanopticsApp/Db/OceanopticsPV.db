@@ -66,6 +66,7 @@ record(lso, "$(P):$(D):setDataDir")
     field(OUT, "@set_data_dir(VAL)")
     field(SCAN, "Passive")
     field(PINI, "YES")
+    field(FLNK, "$(P):$(D):DataDir")
 }
 
 
@@ -74,7 +75,7 @@ record(lsi, "$(P):$(D):DataDir")
     field(DTYP, "pydev")
     field(SIZV, "512")
     field(INP, "@get_datadir()")
-    field(SCAN, "1 second")
+    field(SCAN, "Passive")
     field(PINI, "YES")
 }
 
@@ -85,6 +86,7 @@ record(lso, "$(P):$(D):setFileName")
     field(OUT, "@set_filename(VAL)")
     field(SCAN, "Passive")
     field(PINI, "YES")
+    field(FLNK, "$(P):$(D):FileName")
 }
 
 record(stringout, "$(P):$(D):SaveData")
@@ -100,7 +102,7 @@ record(lsi, "$(P):$(D):FileName")
     field(DTYP, "pydev")
     field(SIZV, "512")
     field(INP, "@get_filename()")
-    field(SCAN, "1 second")
+    field(SCAN, "Passive")
     field(PINI, "YES")
 }
 
@@ -110,7 +112,7 @@ record(lsi, "$(P):$(D):Message")
     field(DTYP, "pydev")
     field(SIZV, "1024")
     field(INP, "@get_message()")
-    field(SCAN, "1 second")
+    field(SCAN, "5 second")
     field(PINI, "YES")
 }
 
