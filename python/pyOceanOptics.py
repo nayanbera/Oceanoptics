@@ -33,6 +33,19 @@ _roi_start = 0
 _roi_stop = ndata
 _message = 'None'
 
+# Cached hardware metadata used by _hdf1_capture_frame().
+# Updated by each setter so we avoid USB round-trips on every spectrum.
+# Seeded once at module load so the cache is valid even before PINI records run.
+try:
+    _cached_itime  = int(odev.get_integration_time())
+    _cached_nscans = int(odev.get_scans_to_average())
+    _cached_boxcar = int(odev.get_boxcar_width())
+except Exception:
+    _cached_itime  = 8000
+    _cached_nscans = 1
+    _cached_boxcar = 0
+_cached_tec = float('nan')
+
 def cleanup_function():
     odapi.close_all_devices()
     odapi.shutdown()
@@ -335,7 +348,9 @@ def get_filename():
 
 
 def set_integration_time(integration_time):
+    global _cached_itime
     odev.set_integration_time(integration_time)
+    _cached_itime = int(integration_time)
 
 
 def get_integration_time():
@@ -351,7 +366,9 @@ def get_scans_to_average():
 
 
 def set_scans_to_average(num_of_scans):
+    global _cached_nscans
     odev.set_scans_to_average(num_of_scans)
+    _cached_nscans = int(num_of_scans)
 
 
 def get_single_strobe_enable():
@@ -742,10 +759,12 @@ def read_lamp_status(force=True):
 
 def get_tec_temp():
     """Current detector temperature in deg C."""
+    global _cached_tec
     try:
-        return float(adv.get_tec_temperature_degrees_C())
+        _cached_tec = float(adv.get_tec_temperature_degrees_C())
     except Exception:
-        return float('nan')
+        _cached_tec = float('nan')
+    return _cached_tec
 
 
 def get_tec_setpoint():
@@ -803,8 +822,9 @@ def get_boxcar_width():
 
 def set_boxcar_width(val):
     """Set boxcar averaging width (0 = off, max ~15)."""
-    global message
+    global message, _cached_boxcar
     odev.set_boxcar_width(int(val))
+    _cached_boxcar = int(val)
     message = f"Boxcar width: {int(val)}"
 
 
@@ -834,20 +854,15 @@ hdf1 = _HDF5Plugin()
 
 
 def _hdf1_capture_frame(spec):
-    """Called after every get_spectrum(); delegates to hdf1."""
-    try:
-        tec = get_tec_temp()
-    except Exception:
-        tec = float('nan')
-    try:
-        itime  = odev.get_integration_time()
-        nscans = odev.get_scans_to_average()
-        boxcar = odev.get_boxcar_width()
-    except Exception:
-        itime = nscans = boxcar = 0
+    """Called after every get_spectrum(); delegates to hdf1.
+
+    Uses cached metadata (itime/nscans/boxcar/tec) to avoid USB round-trips
+    on every acquisition.  The cache is updated by each setter and by the
+    5-second TEC:Temp record scan.
+    """
     hdf1.capture_frame(
         spec, dark, reference, wavelengths,
-        itime, nscans, boxcar, tec,
+        _cached_itime, _cached_nscans, _cached_boxcar, _cached_tec,
         source_filename=filename,
     )
 
