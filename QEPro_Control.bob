@@ -1,0 +1,957 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<display version="2.0.0">
+  <name>QEPro Spectrometer Control</name>
+  <width>1100</width>
+  <height>950</height>
+  <background_color><color red="240" green="240" blue="240" alpha="255"/></background_color>
+
+  <!-- ===== TITLE ===== -->
+  <widget type="label" version="2.0.0">
+    <name>Title</name>
+    <x>10</x><y>6</y><width>620</width><height>26</height>
+    <text>QEPro UV-Vis Spectrometer — 15ID:UVVis</text>
+    <font><font family="Liberation Sans" style="BOLD" size="14"/></font>
+    <foreground_color><color red="0" green="0" blue="100" alpha="255"/></foreground_color>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>Message</name>
+    <x>635</x><y>6</y><width>455</width><height>26</height>
+    <pv_name>15ID:UVVis:Message</pv_name>
+    <font><font family="Liberation Sans" style="ITALIC" size="11"/></font>
+    <foreground_color><color red="80" green="80" blue="80" alpha="255"/></foreground_color>
+  </widget>
+
+  <!-- ===== SPECTRUM PLOT ===== -->
+  <widget type="xy_plot" version="1.0.0">
+    <name>Spectrum Plot</name>
+    <x>10</x><y>36</y><width>700</width><height>284</height>
+    <title>Spectra</title>
+    <show_toolbar>true</show_toolbar>
+    <x_axis>
+      <title>Wavelength (nm)</title>
+      <autoscale>true</autoscale>
+    </x_axis>
+    <y_axes>
+      <y_axis>
+        <title>Intensity (counts)</title>
+        <autoscale>true</autoscale>
+        <index>0</index>
+      </y_axis>
+    </y_axes>
+    <traces>
+      <trace>
+        <name>Spectrum</name>
+        <x_pv>15ID:UVVis:Wavelengths</x_pv>
+        <y_pv>15ID:UVVis:Spectrum</y_pv>
+        <color><color red="21" green="21" blue="196" alpha="255"/></color>
+        <line_width>2</line_width>
+        <point_type>0</point_type>
+        <y_axis>0</y_axis>
+      </trace>
+      <trace>
+        <name>Dark</name>
+        <x_pv>15ID:UVVis:Wavelengths</x_pv>
+        <y_pv>15ID:UVVis:DarkSpectrum</y_pv>
+        <color><color red="80" green="80" blue="80" alpha="255"/></color>
+        <line_width>1</line_width>
+        <point_type>0</point_type>
+        <y_axis>0</y_axis>
+      </trace>
+      <trace>
+        <name>Reference</name>
+        <x_pv>15ID:UVVis:Wavelengths</x_pv>
+        <y_pv>15ID:UVVis:ReferenceSpectrum</y_pv>
+        <color><color red="200" green="100" blue="0" alpha="255"/></color>
+        <line_width>1</line_width>
+        <point_type>0</point_type>
+        <y_axis>0</y_axis>
+      </trace>
+      <trace>
+        <name>UV-Vis Abs</name>
+        <x_pv>15ID:UVVis:Wavelengths</x_pv>
+        <y_pv>15ID:UVVis:UVVis</y_pv>
+        <color><color red="0" green="160" blue="0" alpha="255"/></color>
+        <line_width>2</line_width>
+        <point_type>0</point_type>
+        <y_axis>0</y_axis>
+      </trace>
+    </traces>
+  </widget>
+
+  <!-- ===== TEC SECTION (x=720, y=36, w=370, h=135) ===== -->
+  <widget type="rectangle" version="2.0.0">
+    <name>TEC Rect</name>
+    <x>720</x><y>36</y><width>370</width><height>135</height>
+    <background_color><color red="220" green="232" blue="248" alpha="255"/></background_color>
+    <line_color><color red="80" green="120" blue="180" alpha="255"/></line_color>
+    <line_width>2</line_width>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>TEC Title</name>
+    <x>726</x><y>39</y><width>200</width><height>20</height>
+    <text>TEC Temperature Control</text>
+    <font><font family="Liberation Sans" style="BOLD" size="11"/></font>
+    <foreground_color><color red="0" green="0" blue="100" alpha="255"/></foreground_color>
+  </widget>
+  <!-- Enable row y=62 -->
+  <widget type="label" version="2.0.0">
+    <name>TEC En Lbl</name>
+    <x>726</x><y>63</y><width>65</width><height>20</height>
+    <text>Enable:</text>
+  </widget>
+  <widget type="choice_button" version="1.0.0">
+    <name>TEC Enable</name>
+    <x>794</x><y>61</y><width>100</width><height>24</height>
+    <pv_name>15ID:UVVis:TEC:Enable</pv_name>
+    <items_from_pv>true</items_from_pv>
+  </widget>
+  <widget type="led" version="2.0.0">
+    <name>TEC En RBV</name>
+    <x>900</x><y>64</y><width>18</width><height>18</height>
+    <pv_name>15ID:UVVis:TEC:Enable_RBV</pv_name>
+    <on_color><color red="0" green="200" blue="0" alpha="255"/></on_color>
+    <off_color><color red="160" green="160" blue="160" alpha="255"/></off_color>
+  </widget>
+  <widget type="led" version="2.0.0">
+    <name>TEC Stable LED</name>
+    <x>928</x><y>64</y><width>18</width><height>18</height>
+    <pv_name>15ID:UVVis:TEC:Stable</pv_name>
+    <on_color><color red="0" green="220" blue="0" alpha="255"/></on_color>
+    <off_color><color red="200" green="200" blue="0" alpha="255"/></off_color>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>TEC Stable Lbl</name>
+    <x>950</x><y>63</y><width>50</width><height>20</height>
+    <text>Stable</text>
+  </widget>
+  <!-- Setpoint row y=90 -->
+  <widget type="label" version="2.0.0">
+    <name>TEC SP Lbl</name>
+    <x>726</x><y>91</y><width>65</width><height>20</height>
+    <text>Set SP:</text>
+  </widget>
+  <widget type="text_entry" version="1.0.0">
+    <name>TEC SP</name>
+    <x>794</x><y>89</y><width>72</width><height>24</height>
+    <pv_name>15ID:UVVis:TEC:TempSP</pv_name>
+    <precision>1</precision>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>TEC SP unit</name>
+    <x>870</x><y>91</y><width>22</width><height>20</height>
+    <text>°C</text>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>TEC SP RBV</name>
+    <x>896</x><y>89</y><width>68</width><height>24</height>
+    <pv_name>15ID:UVVis:TEC:TempSP_RBV</pv_name>
+    <precision>1</precision>
+    <foreground_color><color red="0" green="0" blue="150" alpha="255"/></foreground_color>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>TEC SPRBV unit</name>
+    <x>968</x><y>91</y><width>22</width><height>20</height>
+    <text>°C</text>
+  </widget>
+  <!-- Temp readback row y=118 -->
+  <widget type="label" version="2.0.0">
+    <name>TEC Temp Lbl</name>
+    <x>726</x><y>119</y><width>65</width><height>20</height>
+    <text>Temp:</text>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>TEC Temp</name>
+    <x>794</x><y>117</y><width>72</width><height>24</height>
+    <pv_name>15ID:UVVis:TEC:Temp</pv_name>
+    <precision>1</precision>
+    <foreground_color><color red="0" green="80" blue="0" alpha="255"/></foreground_color>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>TEC Temp unit</name>
+    <x>870</x><y>119</y><width>22</width><height>20</height>
+    <text>°C</text>
+  </widget>
+
+  <!-- ===== SIGNAL PROCESSING (x=720, y=176, w=370, h=144) ===== -->
+  <widget type="rectangle" version="2.0.0">
+    <name>SigProc Rect</name>
+    <x>720</x><y>176</y><width>370</width><height>144</height>
+    <background_color><color red="238" green="248" blue="220" alpha="255"/></background_color>
+    <line_color><color red="100" green="150" blue="60" alpha="255"/></line_color>
+    <line_width>2</line_width>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>SigProc Title</name>
+    <x>726</x><y>179</y><width>220</width><height>20</height>
+    <text>Signal Processing</text>
+    <font><font family="Liberation Sans" style="BOLD" size="11"/></font>
+    <foreground_color><color red="0" green="80" blue="0" alpha="255"/></foreground_color>
+  </widget>
+  <!-- Boxcar row y=203 -->
+  <widget type="label" version="2.0.0">
+    <name>Boxcar Lbl</name>
+    <x>726</x><y>204</y><width>95</width><height>20</height>
+    <text>Boxcar Width:</text>
+  </widget>
+  <widget type="text_entry" version="1.0.0">
+    <name>Boxcar Entry</name>
+    <x>824</x><y>202</y><width>60</width><height>24</height>
+    <pv_name>15ID:UVVis:setBoxcarWidth</pv_name>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Boxcar px1</name>
+    <x>888</x><y>204</y><width>22</width><height>20</height>
+    <text>px</text>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>Boxcar RBV</name>
+    <x>915</x><y>202</y><width>50</width><height>24</height>
+    <pv_name>15ID:UVVis:BoxcarWidth</pv_name>
+    <foreground_color><color red="0" green="0" blue="150" alpha="255"/></foreground_color>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Boxcar px2</name>
+    <x>969</x><y>204</y><width>22</width><height>20</height>
+    <text>px</text>
+  </widget>
+  <!-- Nonlinearity row y=232 -->
+  <widget type="label" version="2.0.0">
+    <name>Nonlin Lbl</name>
+    <x>726</x><y>233</y><width>95</width><height>20</height>
+    <text>Nonlin Corr:</text>
+  </widget>
+  <widget type="choice_button" version="1.0.0">
+    <name>Nonlin Btn</name>
+    <x>824</x><y>231</y><width>120</width><height>24</height>
+    <pv_name>15ID:UVVis:setNonlinCorrect</pv_name>
+    <items_from_pv>true</items_from_pv>
+  </widget>
+  <widget type="led" version="2.0.0">
+    <name>Nonlin RBV</name>
+    <x>952</x><y>234</y><width>18</width><height>18</height>
+    <pv_name>15ID:UVVis:NonlinCorrect</pv_name>
+    <on_color><color red="0" green="200" blue="0" alpha="255"/></on_color>
+    <off_color><color red="160" green="160" blue="160" alpha="255"/></off_color>
+  </widget>
+  <!-- File Status row y=261 -->
+  <widget type="label" version="2.0.0">
+    <name>FileStatus Lbl</name>
+    <x>726</x><y>262</y><width>95</width><height>20</height>
+    <text>Save Status:</text>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>FileStatus</name>
+    <x>824</x><y>260</y><width>160</width><height>24</height>
+    <pv_name>15ID:UVVis:FileStatus</pv_name>
+  </widget>
+  <!-- Lamp global on/off row y=290 -->
+  <widget type="label" version="2.0.0">
+    <name>Lamp Lbl</name>
+    <x>726</x><y>291</y><width>95</width><height>20</height>
+    <text>Lamp Power:</text>
+  </widget>
+  <widget type="choice_button" version="1.0.0">
+    <name>Lamp Btn</name>
+    <x>824</x><y>289</y><width>120</width><height>24</height>
+    <pv_name>15ID:UVVis:Lamp</pv_name>
+    <items_from_pv>true</items_from_pv>
+  </widget>
+  <widget type="led" version="2.0.0">
+    <name>LampStatus LED</name>
+    <x>952</x><y>292</y><width>18</width><height>18</height>
+    <pv_name>15ID:UVVis:LampStatus</pv_name>
+    <on_color><color red="255" green="220" blue="0" alpha="255"/></on_color>
+    <off_color><color red="160" green="160" blue="160" alpha="255"/></off_color>
+  </widget>
+
+  <!-- ===== ACQUISITION (x=10, y=326, w=355, h=170) ===== -->
+  <widget type="rectangle" version="2.0.0">
+    <name>Acq Rect</name>
+    <x>10</x><y>326</y><width>355</width><height>170</height>
+    <background_color><color red="245" green="245" blue="255" alpha="255"/></background_color>
+    <line_color><color red="100" green="100" blue="190" alpha="255"/></line_color>
+    <line_width>2</line_width>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Acq Title</name>
+    <x>16</x><y>329</y><width>180</width><height>20</height>
+    <text>Acquisition</text>
+    <font><font family="Liberation Sans" style="BOLD" size="11"/></font>
+    <foreground_color><color red="0" green="0" blue="100" alpha="255"/></foreground_color>
+  </widget>
+  <!-- Integration time y=353 -->
+  <widget type="label" version="2.0.0">
+    <name>IntTime Lbl</name>
+    <x>16</x><y>354</y><width>110</width><height>20</height>
+    <text>Integration Time:</text>
+  </widget>
+  <widget type="text_entry" version="1.0.0">
+    <name>IntTime Entry</name>
+    <x>129</x><y>352</y><width>90</width><height>24</height>
+    <pv_name>15ID:UVVis:setIntegrationTime</pv_name>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>IntTime unit1</name>
+    <x>223</x><y>354</y><width>22</width><height>20</height>
+    <text>µs</text>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>IntTime RBV</name>
+    <x>249</x><y>352</y><width>75</width><height>24</height>
+    <pv_name>15ID:UVVis:IntegrationTime</pv_name>
+    <foreground_color><color red="0" green="0" blue="150" alpha="255"/></foreground_color>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>IntTime unit2</name>
+    <x>328</x><y>354</y><width>22</width><height>20</height>
+    <text>µs</text>
+  </widget>
+  <!-- Scans y=382 -->
+  <widget type="label" version="2.0.0">
+    <name>Scans Lbl</name>
+    <x>16</x><y>383</y><width>110</width><height>20</height>
+    <text>Scans/Average:</text>
+  </widget>
+  <widget type="text_entry" version="1.0.0">
+    <name>Scans Entry</name>
+    <x>129</x><y>381</y><width>65</width><height>24</height>
+    <pv_name>15ID:UVVis:setScanNum</pv_name>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>Scans RBV</name>
+    <x>200</x><y>381</y><width>55</width><height>24</height>
+    <pv_name>15ID:UVVis:ScanNum</pv_name>
+    <foreground_color><color red="0" green="0" blue="150" alpha="255"/></foreground_color>
+  </widget>
+  <!-- Buttons row 1 y=412 -->
+  <widget type="action_button" version="2.0.0">
+    <name>Get Spectrum</name>
+    <x>16</x><y>412</y><width>162</width><height>30</height>
+    <text>Get Spectrum</text>
+    <background_color><color red="0" green="100" blue="200" alpha="255"/></background_color>
+    <foreground_color><color red="255" green="255" blue="255" alpha="255"/></foreground_color>
+    <actions>
+      <action type="write_pv">
+        <pv_name>15ID:UVVis:Spectrum.PROC</pv_name>
+        <value>1</value>
+        <description>Trigger spectrum acquisition</description>
+      </action>
+    </actions>
+  </widget>
+  <widget type="action_button" version="2.0.0">
+    <name>Get Dark</name>
+    <x>184</x><y>412</y><width>162</width><height>30</height>
+    <text>Acquire Dark</text>
+    <background_color><color red="60" green="60" blue="60" alpha="255"/></background_color>
+    <foreground_color><color red="255" green="255" blue="255" alpha="255"/></foreground_color>
+    <actions>
+      <action type="write_pv">
+        <pv_name>15ID:UVVis:DarkSpectrum.PROC</pv_name>
+        <value>1</value>
+        <description>Acquire dark spectrum</description>
+      </action>
+    </actions>
+  </widget>
+  <!-- Buttons row 2 y=448 -->
+  <widget type="action_button" version="2.0.0">
+    <name>Get Reference</name>
+    <x>16</x><y>448</y><width>162</width><height>30</height>
+    <text>Acquire Reference</text>
+    <background_color><color red="180" green="90" blue="0" alpha="255"/></background_color>
+    <foreground_color><color red="255" green="255" blue="255" alpha="255"/></foreground_color>
+    <actions>
+      <action type="write_pv">
+        <pv_name>15ID:UVVis:ReferenceSpectrum.PROC</pv_name>
+        <value>1</value>
+        <description>Acquire reference spectrum</description>
+      </action>
+    </actions>
+  </widget>
+  <widget type="action_button" version="2.0.0">
+    <name>Compute UVVis</name>
+    <x>184</x><y>448</y><width>162</width><height>30</height>
+    <text>Compute UV-Vis Abs</text>
+    <background_color><color red="0" green="130" blue="0" alpha="255"/></background_color>
+    <foreground_color><color red="255" green="255" blue="255" alpha="255"/></foreground_color>
+    <actions>
+      <action type="write_pv">
+        <pv_name>15ID:UVVis:UVVis.PROC</pv_name>
+        <value>1</value>
+        <description>Compute UV-Vis absorbance</description>
+      </action>
+    </actions>
+  </widget>
+
+  <!-- ===== LAMP CONTROL (x=375, y=326, w=355, h=170) ===== -->
+  <widget type="rectangle" version="2.0.0">
+    <name>Lamp Rect</name>
+    <x>375</x><y>326</y><width>355</width><height>170</height>
+    <background_color><color red="255" green="248" blue="228" alpha="255"/></background_color>
+    <line_color><color red="180" green="140" blue="50" alpha="255"/></line_color>
+    <line_width>2</line_width>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Lamp Title</name>
+    <x>381</x><y>329</y><width>200</width><height>20</height>
+    <text>Lamp Control</text>
+    <font><font family="Liberation Sans" style="BOLD" size="11"/></font>
+    <foreground_color><color red="80" green="60" blue="0" alpha="255"/></foreground_color>
+  </widget>
+  <!-- Deuterium y=353 -->
+  <widget type="label" version="2.0.0">
+    <name>D2 Lbl</name>
+    <x>381</x><y>354</y><width>72</width><height>20</height>
+    <text>Deuterium:</text>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>D2 Ind</name>
+    <x>456</x><y>352</y><width>105</width><height>24</height>
+    <pv_name>15ID:UVVis:D2_IND</pv_name>
+    <foreground_color><color red="0" green="0" blue="150" alpha="255"/></foreground_color>
+  </widget>
+  <widget type="action_button" version="2.0.0">
+    <name>D2 Toggle</name>
+    <x>568</x><y>352</y><width>95</width><height>24</height>
+    <text>Toggle D2</text>
+    <actions>
+      <action type="write_pv">
+        <pv_name>15ID:UVVis:D2_TOGGLE</pv_name>
+        <value>1</value>
+        <description>Toggle deuterium lamp</description>
+      </action>
+    </actions>
+  </widget>
+  <!-- Halogen y=382 -->
+  <widget type="label" version="2.0.0">
+    <name>HAL Lbl</name>
+    <x>381</x><y>383</y><width>72</width><height>20</height>
+    <text>Halogen:</text>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>HAL Ind</name>
+    <x>456</x><y>381</y><width>105</width><height>24</height>
+    <pv_name>15ID:UVVis:HAL_IND</pv_name>
+    <foreground_color><color red="0" green="0" blue="150" alpha="255"/></foreground_color>
+  </widget>
+  <widget type="action_button" version="2.0.0">
+    <name>HAL Toggle</name>
+    <x>568</x><y>381</y><width>95</width><height>24</height>
+    <text>Toggle Halogen</text>
+    <actions>
+      <action type="write_pv">
+        <pv_name>15ID:UVVis:HAL_TOGGLE</pv_name>
+        <value>1</value>
+        <description>Toggle halogen lamp</description>
+      </action>
+    </actions>
+  </widget>
+  <!-- Status text y=412 -->
+  <widget type="label" version="2.0.0">
+    <name>LampStatTxt Lbl</name>
+    <x>381</x><y>413</y><width>72</width><height>20</height>
+    <text>Status:</text>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>LampStatusText</name>
+    <x>456</x><y>411</y><width>268</width><height>24</height>
+    <pv_name>15ID:UVVis:LampStatusText</pv_name>
+  </widget>
+  <!-- Legacy text save y=443 -->
+  <widget type="label" version="2.0.0">
+    <name>SaveDir Lbl</name>
+    <x>381</x><y>444</y><width>72</width><height>20</height>
+    <text>Save Dir:</text>
+  </widget>
+  <widget type="text_entry" version="1.0.0">
+    <name>SaveDir Entry</name>
+    <x>456</x><y>442</y><width>155</width><height>24</height>
+    <pv_name>15ID:UVVis:setDataDir</pv_name>
+  </widget>
+  <widget type="action_button" version="2.0.0">
+    <name>SaveData Btn</name>
+    <x>617</x><y>442</y><width>108</width><height>24</height>
+    <text>Save Text File</text>
+    <actions>
+      <action type="write_pv">
+        <pv_name>15ID:UVVis:SaveData</pv_name>
+        <value>1</value>
+        <description>Save text-format spectrum file</description>
+      </action>
+    </actions>
+  </widget>
+
+  <!-- ===== ROI ANALYSIS (x=740, y=326, w=350, h=170) ===== -->
+  <widget type="rectangle" version="2.0.0">
+    <name>ROI Rect</name>
+    <x>740</x><y>326</y><width>350</width><height>170</height>
+    <background_color><color red="246" green="240" blue="255" alpha="255"/></background_color>
+    <line_color><color red="120" green="80" blue="180" alpha="255"/></line_color>
+    <line_width>2</line_width>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>ROI Title</name>
+    <x>746</x><y>329</y><width>200</width><height>20</height>
+    <text>ROI Analysis</text>
+    <font><font family="Liberation Sans" style="BOLD" size="11"/></font>
+    <foreground_color><color red="60" green="0" blue="100" alpha="255"/></foreground_color>
+  </widget>
+  <!-- ROI Start y=353 -->
+  <widget type="label" version="2.0.0">
+    <name>ROIStart Lbl</name>
+    <x>746</x><y>354</y><width>72</width><height>20</height>
+    <text>ROI Start:</text>
+  </widget>
+  <widget type="text_entry" version="1.0.0">
+    <name>ROIStart Entry</name>
+    <x>821</x><y>352</y><width>70</width><height>24</height>
+    <pv_name>15ID:UVVis:ROIStart</pv_name>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>ROIStart px</name>
+    <x>895</x><y>354</y><width>38</width><height>20</height>
+    <text>pixel</text>
+  </widget>
+  <!-- ROI Stop y=382 -->
+  <widget type="label" version="2.0.0">
+    <name>ROIStop Lbl</name>
+    <x>746</x><y>383</y><width>72</width><height>20</height>
+    <text>ROI Stop:</text>
+  </widget>
+  <widget type="text_entry" version="1.0.0">
+    <name>ROIStop Entry</name>
+    <x>821</x><y>381</y><width>70</width><height>24</height>
+    <pv_name>15ID:UVVis:ROIStop</pv_name>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>ROIStop px</name>
+    <x>895</x><y>383</y><width>38</width><height>20</height>
+    <text>pixel</text>
+  </widget>
+  <!-- Intensity y=412 -->
+  <widget type="label" version="2.0.0">
+    <name>ROI Int Lbl</name>
+    <x>746</x><y>413</y><width>72</width><height>20</height>
+    <text>Intensity:</text>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>ROI Int</name>
+    <x>821</x><y>411</y><width>110</width><height>24</height>
+    <pv_name>15ID:UVVis:ROI_Int</pv_name>
+    <precision>1</precision>
+    <foreground_color><color red="0" green="0" blue="150" alpha="255"/></foreground_color>
+  </widget>
+  <!-- Absorbance y=442 -->
+  <widget type="label" version="2.0.0">
+    <name>ROI Abs Lbl</name>
+    <x>746</x><y>443</y><width>72</width><height>20</height>
+    <text>Absorbance:</text>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>ROI Abs</name>
+    <x>821</x><y>441</y><width>110</width><height>24</height>
+    <pv_name>15ID:UVVis:ROI_Abs</pv_name>
+    <precision>4</precision>
+    <foreground_color><color red="0" green="120" blue="0" alpha="255"/></foreground_color>
+  </widget>
+
+  <!-- ===== HDF5 FILE PLUGIN (x=10, y=502, w=1080, h=305) ===== -->
+  <widget type="rectangle" version="2.0.0">
+    <name>HDF5 Rect</name>
+    <x>10</x><y>502</y><width>1080</width><height>305</height>
+    <background_color><color red="234" green="246" blue="234" alpha="255"/></background_color>
+    <line_color><color red="60" green="130" blue="60" alpha="255"/></line_color>
+    <line_width>2</line_width>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>HDF5 Title</name>
+    <x>16</x><y>505</y><width>380</width><height>20</height>
+    <text>HDF5 File Plugin  (areaDetector HDF1 style)</text>
+    <font><font family="Liberation Sans" style="BOLD" size="11"/></font>
+    <foreground_color><color red="0" green="80" blue="0" alpha="255"/></foreground_color>
+  </widget>
+  <!-- h5py available indicator -->
+  <widget type="led" version="2.0.0">
+    <name>HDF5 Avail LED</name>
+    <x>630</x><y>507</y><width>16</width><height>16</height>
+    <pv_name>15ID:UVVis:HDF1:Available_RBV</pv_name>
+    <on_color><color red="0" green="200" blue="0" alpha="255"/></on_color>
+    <off_color><color red="200" green="0" blue="0" alpha="255"/></off_color>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>HDF5 Avail Lbl</name>
+    <x>650</x><y>506</y><width>95</width><height>20</height>
+    <text>h5py available</text>
+  </widget>
+
+  <!-- Row 1: FilePath y=528 -->
+  <widget type="label" version="2.0.0">
+    <name>FilePath Lbl</name>
+    <x>16</x><y>529</y><width>65</width><height>20</height>
+    <text>File Path:</text>
+  </widget>
+  <widget type="text_entry" version="1.0.0">
+    <name>FilePath Entry</name>
+    <x>84</x><y>527</y><width>460</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:FilePath</pv_name>
+  </widget>
+  <widget type="led" version="2.0.0">
+    <name>FilePath Exists LED</name>
+    <x>550</x><y>530</y><width>18</width><height>18</height>
+    <pv_name>15ID:UVVis:HDF1:FilePathExists_RBV</pv_name>
+    <on_color><color red="0" green="200" blue="0" alpha="255"/></on_color>
+    <off_color><color red="200" green="0" blue="0" alpha="255"/></off_color>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>FilePath Exists Lbl</name>
+    <x>572</x><y>529</y><width>72</width><height>20</height>
+    <text>Path exists</text>
+  </widget>
+
+  <!-- Row 2: FileName + FileNumber + AutoIncrement y=557 -->
+  <widget type="label" version="2.0.0">
+    <name>FileName Lbl</name>
+    <x>16</x><y>558</y><width>65</width><height>20</height>
+    <text>File Name:</text>
+  </widget>
+  <widget type="text_entry" version="1.0.0">
+    <name>FileName Entry</name>
+    <x>84</x><y>556</y><width>200</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:FileName</pv_name>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>FileNum Lbl</name>
+    <x>292</x><y>558</y><width>42</width><height>20</height>
+    <text>Num:</text>
+  </widget>
+  <widget type="text_entry" version="1.0.0">
+    <name>FileNum Entry</name>
+    <x>337</x><y>556</y><width>65</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:FileNumber</pv_name>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>FileNum RBV</name>
+    <x>407</x><y>556</y><width>50</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:FileNumber_RBV</pv_name>
+    <foreground_color><color red="0" green="0" blue="150" alpha="255"/></foreground_color>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>AutoInc Lbl</name>
+    <x>465</x><y>558</y><width>72</width><height>20</height>
+    <text>Auto Incr:</text>
+  </widget>
+  <widget type="choice_button" version="1.0.0">
+    <name>AutoInc Btn</name>
+    <x>540</x><y>556</y><width>115</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:AutoIncrement</pv_name>
+    <items_from_pv>true</items_from_pv>
+  </widget>
+
+  <!-- Row 3: Template + FullFileName y=586 -->
+  <widget type="label" version="2.0.0">
+    <name>Template Lbl</name>
+    <x>16</x><y>587</y><width>65</width><height>20</height>
+    <text>Template:</text>
+  </widget>
+  <widget type="text_entry" version="1.0.0">
+    <name>Template Entry</name>
+    <x>84</x><y>585</y><width>175</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:FileTemplate</pv_name>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>Template RBV</name>
+    <x>264</x><y>585</y><width>155</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:FileTemplate_RBV</pv_name>
+    <foreground_color><color red="0" green="0" blue="150" alpha="255"/></foreground_color>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>FullFN Lbl</name>
+    <x>427</x><y>587</y><width>65</width><height>20</height>
+    <text>Last File:</text>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>FullFN RBV</name>
+    <x>495</x><y>585</y><width>585</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:FullFileName_RBV</pv_name>
+    <foreground_color><color red="0" green="100" blue="0" alpha="255"/></foreground_color>
+  </widget>
+
+  <!-- Row 4: WriteMode + NumCapture + NumCaptured y=615 -->
+  <widget type="label" version="2.0.0">
+    <name>WriteMode Lbl</name>
+    <x>16</x><y>616</y><width>78</width><height>20</height>
+    <text>Write Mode:</text>
+  </widget>
+  <widget type="choice_button" version="1.0.0">
+    <name>WriteMode Btn</name>
+    <x>97</x><y>614</y><width>198</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:FileWriteMode</pv_name>
+    <items_from_pv>true</items_from_pv>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>WriteMode RBV</name>
+    <x>300</x><y>614</y><width>90</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:FileWriteMode_RBV</pv_name>
+    <foreground_color><color red="0" green="0" blue="150" alpha="255"/></foreground_color>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>NumCap Lbl</name>
+    <x>400</x><y>616</y><width>85</width><height>20</height>
+    <text>Num Capture:</text>
+  </widget>
+  <widget type="text_entry" version="1.0.0">
+    <name>NumCap Entry</name>
+    <x>488</x><y>614</y><width>65</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:NumCapture</pv_name>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>NumCap RBV</name>
+    <x>558</x><y>614</y><width>55</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:NumCapture_RBV</pv_name>
+    <foreground_color><color red="0" green="0" blue="150" alpha="255"/></foreground_color>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>NumCaptured Lbl</name>
+    <x>622</x><y>616</y><width>72</width><height>20</height>
+    <text>Captured:</text>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>NumCaptured RBV</name>
+    <x>697</x><y>614</y><width>60</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:NumCaptured_RBV</pv_name>
+    <foreground_color><color red="0" green="0" blue="150" alpha="255"/></foreground_color>
+  </widget>
+
+  <!-- Row 5: Capture + AutoSave + WriteFile y=645 -->
+  <widget type="action_button" version="2.0.0">
+    <name>Start Capture</name>
+    <x>16</x><y>645</y><width>155</width><height>28</height>
+    <text>Start Capture / Stream</text>
+    <background_color><color red="0" green="140" blue="0" alpha="255"/></background_color>
+    <foreground_color><color red="255" green="255" blue="255" alpha="255"/></foreground_color>
+    <actions>
+      <action type="write_pv">
+        <pv_name>15ID:UVVis:HDF1:Capture</pv_name>
+        <value>1</value>
+        <description>Start HDF5 capture or stream</description>
+      </action>
+    </actions>
+  </widget>
+  <widget type="action_button" version="2.0.0">
+    <name>Stop Capture</name>
+    <x>177</x><y>645</y><width>120</width><height>28</height>
+    <text>Stop Capture</text>
+    <background_color><color red="180" green="0" blue="0" alpha="255"/></background_color>
+    <foreground_color><color red="255" green="255" blue="255" alpha="255"/></foreground_color>
+    <actions>
+      <action type="write_pv">
+        <pv_name>15ID:UVVis:HDF1:Capture</pv_name>
+        <value>0</value>
+        <description>Stop HDF5 capture or stream</description>
+      </action>
+    </actions>
+  </widget>
+  <widget type="led" version="2.0.0">
+    <name>Capture RBV LED</name>
+    <x>303</x><y>649</y><width>18</width><height>18</height>
+    <pv_name>15ID:UVVis:HDF1:Capture_RBV</pv_name>
+    <on_color><color red="0" green="200" blue="0" alpha="255"/></on_color>
+    <off_color><color red="160" green="160" blue="160" alpha="255"/></off_color>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>AutoSave Lbl</name>
+    <x>328</x><y>647</y><width>72</width><height>20</height>
+    <text>Auto Save:</text>
+  </widget>
+  <widget type="choice_button" version="1.0.0">
+    <name>AutoSave Btn</name>
+    <x>403</x><y>645</y><width>120</width><height>28</height>
+    <pv_name>15ID:UVVis:HDF1:AutoSave</pv_name>
+    <items_from_pv>true</items_from_pv>
+  </widget>
+  <widget type="action_button" version="2.0.0">
+    <name>WriteFile Now</name>
+    <x>533</x><y>645</y><width>155</width><height>28</height>
+    <text>Write HDF5 Now</text>
+    <background_color><color red="0" green="80" blue="170" alpha="255"/></background_color>
+    <foreground_color><color red="255" green="255" blue="255" alpha="255"/></foreground_color>
+    <actions>
+      <action type="write_pv">
+        <pv_name>15ID:UVVis:HDF1:WriteFile</pv_name>
+        <value>1</value>
+        <description>Write single HDF5 file now</description>
+      </action>
+    </actions>
+  </widget>
+
+  <!-- Row 6: WriteStatus + Message y=679 -->
+  <widget type="label" version="2.0.0">
+    <name>WriteStatus Lbl</name>
+    <x>16</x><y>680</y><width>85</width><height>20</height>
+    <text>Write Status:</text>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>WriteStatus RBV</name>
+    <x>104</x><y>678</y><width>95</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:WriteStatus_RBV</pv_name>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>WriteMsg Lbl</name>
+    <x>207</x><y>680</y><width>62</width><height>20</height>
+    <text>Message:</text>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>WriteMsg RBV</name>
+    <x>272</x><y>678</y><width>808</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:WriteMessage_RBV</pv_name>
+    <foreground_color><color red="150" green="0" blue="0" alpha="255"/></foreground_color>
+  </widget>
+
+  <!-- Row 7: XML y=708 -->
+  <widget type="label" version="2.0.0">
+    <name>XMLFile Lbl</name>
+    <x>16</x><y>709</y><width>68</width><height>20</height>
+    <text>XML Layout:</text>
+  </widget>
+  <widget type="text_entry" version="1.0.0">
+    <name>XMLFile Entry</name>
+    <x>87</x><y>707</y><width>400</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:XMLFileName</pv_name>
+  </widget>
+  <widget type="led" version="2.0.0">
+    <name>XMLValid LED</name>
+    <x>493</x><y>710</y><width>18</width><height>18</height>
+    <pv_name>15ID:UVVis:HDF1:XMLValid_RBV</pv_name>
+    <on_color><color red="0" green="200" blue="0" alpha="255"/></on_color>
+    <off_color><color red="200" green="0" blue="0" alpha="255"/></off_color>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>XMLValid Lbl</name>
+    <x>515</x><y>709</y><width>40</width><height>20</height>
+    <text>Valid</text>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>XMLErr Lbl</name>
+    <x>561</x><y>709</y><width>62</width><height>20</height>
+    <text>XML Error:</text>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>XMLErr RBV</name>
+    <x>626</x><y>707</y><width>454</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:XMLErrorMsg_RBV</pv_name>
+    <foreground_color><color red="180" green="0" blue="0" alpha="255"/></foreground_color>
+  </widget>
+
+  <!-- Row 8: FilePath RBV (verification) y=737 -->
+  <widget type="label" version="2.0.0">
+    <name>FilePath RBV Lbl</name>
+    <x>16</x><y>738</y><width>68</width><height>20</height>
+    <text>Path RBV:</text>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>FilePath RBV</name>
+    <x>87</x><y>736</y><width>460</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:FilePath_RBV</pv_name>
+    <foreground_color><color red="0" green="0" blue="150" alpha="255"/></foreground_color>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>FileName RBV Lbl</name>
+    <x>558</x><y>738</y><width>68</width><height>20</height>
+    <text>Name RBV:</text>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>FileName RBV</name>
+    <x>629</x><y>736</y><width>200</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:FileName_RBV</pv_name>
+    <foreground_color><color red="0" green="0" blue="150" alpha="255"/></foreground_color>
+  </widget>
+
+  <!-- ===== METADATA (x=10, y=813, w=1080, h=120) ===== -->
+  <widget type="rectangle" version="2.0.0">
+    <name>Meta Rect</name>
+    <x>10</x><y>813</y><width>1080</width><height>120</height>
+    <background_color><color red="248" green="238" blue="255" alpha="255"/></background_color>
+    <line_color><color red="120" green="80" blue="165" alpha="255"/></line_color>
+    <line_width>2</line_width>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Meta Title</name>
+    <x>16</x><y>816</y><width>320</width><height>20</height>
+    <text>Sample Metadata  (written to HDF5)</text>
+    <font><font family="Liberation Sans" style="BOLD" size="11"/></font>
+    <foreground_color><color red="60" green="0" blue="100" alpha="255"/></foreground_color>
+  </widget>
+
+  <!-- Meta row 1: SampleName + SampleDescription y=840 -->
+  <widget type="label" version="2.0.0">
+    <name>SampleName Lbl</name>
+    <x>16</x><y>841</y><width>90</width><height>20</height>
+    <text>Sample Name:</text>
+  </widget>
+  <widget type="text_entry" version="1.0.0">
+    <name>SampleName Entry</name>
+    <x>109</x><y>839</y><width>195</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:Attr:SampleName</pv_name>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>SampleName RBV</name>
+    <x>309</x><y>839</y><width>145</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:Attr:SampleName_RBV</pv_name>
+    <foreground_color><color red="0" green="0" blue="150" alpha="255"/></foreground_color>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>SampleDesc Lbl</name>
+    <x>462</x><y>841</y><width>90</width><height>20</height>
+    <text>Description:</text>
+  </widget>
+  <widget type="text_entry" version="1.0.0">
+    <name>SampleDesc Entry</name>
+    <x>555</x><y>839</y><width>260</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:Attr:SampleDescription</pv_name>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>SampleDesc RBV</name>
+    <x>820</x><y>839</y><width>260</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:Attr:SampleDescription_RBV</pv_name>
+    <foreground_color><color red="0" green="0" blue="150" alpha="255"/></foreground_color>
+  </widget>
+
+  <!-- Meta row 2: BeamEnergy + ExposureMode y=870 -->
+  <widget type="label" version="2.0.0">
+    <name>BeamEnergy Lbl</name>
+    <x>16</x><y>871</y><width>90</width><height>20</height>
+    <text>Beam Energy:</text>
+  </widget>
+  <widget type="text_entry" version="1.0.0">
+    <name>BeamEnergy Entry</name>
+    <x>109</x><y>869</y><width>90</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:Attr:BeamEnergy</pv_name>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>BeamEnergy unit</name>
+    <x>203</x><y>871</y><width>35</width><height>20</height>
+    <text>keV</text>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>BeamEnergy RBV</name>
+    <x>241</x><y>869</y><width>75</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:Attr:BeamEnergy_RBV</pv_name>
+    <foreground_color><color red="0" green="0" blue="150" alpha="255"/></foreground_color>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>ExpMode Lbl</name>
+    <x>325</x><y>871</y><width>100</width><height>20</height>
+    <text>Exposure Mode:</text>
+  </widget>
+  <widget type="text_entry" version="1.0.0">
+    <name>ExpMode Entry</name>
+    <x>428</x><y>869</y><width>175</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:Attr:ExposureMode</pv_name>
+  </widget>
+  <widget type="text_update" version="1.0.0">
+    <name>ExpMode RBV</name>
+    <x>608</x><y>869</y><width>150</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:Attr:ExposureMode_RBV</pv_name>
+    <foreground_color><color red="0" green="0" blue="150" alpha="255"/></foreground_color>
+  </widget>
+
+</display>

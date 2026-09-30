@@ -1,0 +1,72 @@
+# QE Pro spectrum as an mca record backed by drvSoftMca.
+#
+# Startup script prerequisite (before dbLoadRecords):
+#   drvSoftMcaConfigure("QEPRO_MCA", 1044)
+#
+# Python bridge (after pydev("from pyOceanOptics import *")):
+#   pydev("ioc_prefix = '$(P):$(D):'")
+#
+# Each call to get_spectrum() / $(P):$(D):Spectrum pushes new data into
+# MCA1 via pyepics loopback CA.
+
+record(mca, "$(P):$(D):MCA1")
+{
+    field(DESC, "QE Pro spectrum (MCA)")
+    field(DTYP, "asynMCA")
+    field(INP,  "@asyn(QEPRO_MCA 0)")
+    field(NMAX, "1044")
+    field(NUSE, "1044")
+    field(SCAN, "Passive")
+    field(PREC, "4")
+    field(EGU,  "nm")
+    # Linear wavelength calibration -- approximate for QE Pro UV-VIS.
+    # Refine with actual values from $(P):$(D):Wavelengths:
+    #   CALO = wavelengths[0]
+    #   CALS = (wavelengths[-1] - wavelengths[0]) / (ndata - 1)
+    field(CALO, "200.0")
+    field(CALS, "0.862")
+    field(CALQ, "0.0")
+    # ROI 0: UV range (ch 0-232, ~200-400 nm)
+    field(R0NM, "UV")
+    field(R0LO, "0")
+    field(R0HI, "232")
+    # ROI 1: VIS range (ch 232-580, ~400-700 nm)
+    field(R1NM, "VIS")
+    field(R1LO, "232")
+    field(R1HI, "580")
+    # ROI 2: NIR range (ch 580-1044, ~700-1100 nm)
+    field(R2NM, "NIR")
+    field(R2LO, "580")
+    field(R2HI, "1044")
+    # ROI 3: user-defined
+    field(R3NM, "User")
+    field(R3LO, "0")
+    field(R3HI, "1044")
+}
+
+# Calibration setpoints -- writing here updates MCA1.CALO / MCA1.CALS live.
+record(ao, "$(P):$(D):MCA1:CALO")
+{
+    field(DESC, "MCA wavelength offset (nm at ch 0)")
+    field(DTYP, "Soft Channel")
+    field(VAL,  "200.0")
+    field(PREC, "4")
+    field(EGU,  "nm")
+    field(DRVL, "0")
+    field(DRVH, "1000")
+    field(OUT,  "$(P):$(D):MCA1.CALO PP")
+    field(PINI, "YES")
+}
+
+record(ao, "$(P):$(D):MCA1:CALS")
+{
+    field(DESC, "MCA wavelength slope (nm per channel)")
+    field(DTYP, "Soft Channel")
+    field(VAL,  "0.862")
+    field(PREC, "6")
+    field(EGU,  "nm/ch")
+    field(DRVL, "0")
+    field(DRVH, "10")
+    field(OUT,  "$(P):$(D):MCA1.CALS PP")
+    field(PINI, "YES")
+}

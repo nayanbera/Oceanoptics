@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<!--
+  HDF5 layout file for Ocean Insight QE Pro spectrometer IOC.
+  Follows the NeXus / NXcanSAS application definition.
+
+  Source types for <dataset> and <attribute>:
+    constant     -- literal value; set value= and optionally type=string|int|float
+    detector     -- the spectrum array (or stacked array in Capture/Stream mode)
+    ndattribute  -- named value from the NDAttributes dictionary; set ndattribute=
+
+  Auto-populated NDAttribute keys (refreshed on every capture):
+    Wavelengths          float64[1044]  wavelength axis in nm
+    DarkSpectrum         float64[1044]  last stored dark spectrum
+    ReferenceSpectrum    float64[1044]  last stored reference spectrum
+    IntegrationTime      float          integration time in microseconds
+    ScansToAverage       int            number of spectra averaged per acquisition
+    BoxcarWidth          int            boxcar smoothing width (0 = off)
+    TECTemperature       float          detector temperature in deg C
+    Timestamp            string         ISO-8601 acquisition time
+    FrameNumber          int            frame counter within current file
+    SourceFilename       string         base filename (from FileName PV)
+
+  User-settable NDAttribute keys (set via HDF1:Attr:<name> PVs):
+    SampleName           string
+    SampleDescription    string
+    BeamEnergy           float          incident beam energy in keV
+    ExposureMode         string         e.g. "single" or "scan"
+    (add more in the DB file / pyOceanOptics.py as needed)
+-->
+
+<hdf5_layout>
+
+  <group name="entry">
+    <attribute name="NX_class"    source="constant" value="NXentry"  type="string" />
+    <attribute name="definition"  source="constant" value="NXcanSAS" type="string" />
+
+    <!-- ============================================================
+         /entry/data
+         Primary detector data: spectrum vs. wavelength
+    ============================================================ -->
+    <group name="data">
+      <attribute name="NX_class"  source="constant" value="NXdata"      type="string" />
+      <attribute name="signal"    source="constant" value="spectrum"     type="string" />
+      <attribute name="axes"      source="constant" value="wavelength"   type="string" />
+
+      <!-- det_default="true" marks this dataset as the spectrum receiver -->
+      <dataset name="spectrum" source="detector" det_default="true">
+        <attribute name="units"      source="constant" value="counts" type="string" />
+        <attribute name="long_name"  source="constant" value="Intensity" type="string" />
+      </dataset>
+
+      <dataset name="wavelength" source="ndattribute" ndattribute="Wavelengths">
+        <attribute name="units"      source="constant" value="nm" type="string" />
+        <attribute name="long_name"  source="constant" value="Wavelength" type="string" />
+        <attribute name="axis"       source="constant" value="1" type="int" />
+      </dataset>
+
+      <dataset name="dark" source="ndattribute" ndattribute="DarkSpectrum">
+        <attribute name="units"      source="constant" value="counts" type="string" />
+        <attribute name="long_name"  source="constant" value="Dark spectrum" type="string" />
+      </dataset>
+
+      <dataset name="reference" source="ndattribute" ndattribute="ReferenceSpectrum">
+        <attribute name="units"      source="constant" value="counts" type="string" />
+        <attribute name="long_name"  source="constant" value="Reference spectrum" type="string" />
+      </dataset>
+    </group>
+
+    <!-- ============================================================
+         /entry/instrument
+         Instrument and detector metadata
+    ============================================================ -->
+    <group name="instrument">
+      <attribute name="NX_class" source="constant" value="NXinstrument" type="string" />
+
+      <group name="detector">
+        <attribute name="NX_class"   source="constant" value="NXdetector" type="string" />
+        <attribute name="description" source="constant" value="Ocean Insight QE Pro" type="string" />
+
+        <dataset name="integration_time" source="ndattribute" ndattribute="IntegrationTime">
+          <attribute name="units"    source="constant" value="us"    type="string" />
+          <attribute name="long_name" source="constant" value="Integration time" type="string" />
+        </dataset>
+
+        <dataset name="scans_to_average" source="ndattribute" ndattribute="ScansToAverage">
+          <attribute name="long_name" source="constant" value="Scans averaged per acquisition" type="string" />
+        </dataset>
+
+        <dataset name="boxcar_width" source="ndattribute" ndattribute="BoxcarWidth">
+          <attribute name="long_name" source="constant" value="Boxcar smoothing width (0=off)" type="string" />
+        </dataset>
+
+        <dataset name="tec_temperature" source="ndattribute" ndattribute="TECTemperature">
+          <attribute name="units"    source="constant" value="C"     type="string" />
+          <attribute name="long_name" source="constant" value="Detector temperature" type="string" />
+        </dataset>
+
+        <!-- Beam energy, set via HDF1:Attr:BeamEnergy PV -->
+        <dataset name="beam_energy" source="ndattribute" ndattribute="BeamEnergy">
+          <attribute name="units"    source="constant" value="keV"   type="string" />
+        </dataset>
+      </group>
+
+      <!-- Source: beam or lamp -->
+      <group name="source">
+        <attribute name="NX_class" source="constant" value="NXsource" type="string" />
+        <dataset name="name" source="constant" value="Advanced Photon Source" type="string" />
+        <dataset name="type" source="constant" value="Synchrotron X-ray Source" type="string" />
+        <dataset name="probe" source="constant" value="x-ray" type="string" />
+      </group>
+    </group>
+
+    <!-- ============================================================
+         /entry/sample
+         Sample information (set via HDF1:Attr:* PVs)
+    ============================================================ -->
+    <group name="sample">
+      <attribute name="NX_class"  source="constant" value="NXsample" type="string" />
+
+      <dataset name="name" source="ndattribute" ndattribute="SampleName">
+        <attribute name="long_name" source="constant" value="Sample name" type="string" />
+      </dataset>
+
+      <dataset name="description" source="ndattribute" ndattribute="SampleDescription">
+        <attribute name="long_name" source="constant" value="Sample description" type="string" />
+      </dataset>
+    </group>
+
+    <!-- ============================================================
+         /entry/acquisition
+         Per-acquisition timing and identification
+    ============================================================ -->
+    <group name="acquisition">
+      <attribute name="NX_class" source="constant" value="NXcollection" type="string" />
+
+      <dataset name="timestamp" source="ndattribute" ndattribute="Timestamp">
+        <attribute name="long_name" source="constant" value="Acquisition timestamp (ISO-8601)" type="string" />
+      </dataset>
+
+      <dataset name="frame_number" source="ndattribute" ndattribute="FrameNumber">
+        <attribute name="long_name" source="constant" value="Frame number within file" type="string" />
+      </dataset>
+
+      <dataset name="source_filename" source="ndattribute" ndattribute="SourceFilename">
+        <attribute name="long_name" source="constant" value="Base filename from FileName PV" type="string" />
+      </dataset>
+
+      <dataset name="exposure_mode" source="ndattribute" ndattribute="ExposureMode">
+        <attribute name="long_name" source="constant" value="Exposure mode (single/scan/...)" type="string" />
+      </dataset>
+    </group>
+
+  </group>
+
+</hdf5_layout>

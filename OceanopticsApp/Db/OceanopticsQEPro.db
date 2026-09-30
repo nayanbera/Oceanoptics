@@ -1,0 +1,153 @@
+# QE Pro specific controls: TEC, boxcar width, non-linearity correction,
+# and HDF5 file I/O.
+#
+# HDF5 saves share DataDir / FileName / FileStatus with the text-format
+# save (OceanopticsPV.db).  Only HDF:SaveNow and HDF:AutoSave are new.
+
+# ------------------------------------------------------------------
+# TEC (Thermo-Electric Cooler)
+# ------------------------------------------------------------------
+
+record(ai, "$(P):$(D):TEC:Temp")
+{
+    field(DESC, "Detector temperature")
+    field(DTYP, "pydev")
+    field(INP,  "@get_tec_temp()")
+    field(SCAN, "5 second")
+    field(EGU,  "C")
+    field(PREC, "2")
+    field(LOW,  "-25")
+    field(HIGH, "30")
+    field(LSV,  "MINOR")
+    field(HSV,  "MINOR")
+}
+
+record(ao, "$(P):$(D):TEC:TempSP")
+{
+    field(DESC, "TEC setpoint")
+    field(DTYP, "pydev")
+    field(OUT,  "@set_tec_setpoint(VAL)")
+    field(SCAN, "Passive")
+    field(EGU,  "C")
+    field(PREC, "1")
+    field(DRVL, "-40")
+    field(DRVH, "25")
+    field(VAL,  "-15")
+    field(PINI, "YES")
+    field(FLNK, "$(P):$(D):TEC:TempSP_RBV")
+}
+
+record(ai, "$(P):$(D):TEC:TempSP_RBV")
+{
+    field(DESC, "TEC setpoint readback")
+    field(DTYP, "pydev")
+    field(INP,  "@get_tec_setpoint()")
+    field(SCAN, "Passive")
+    field(EGU,  "C")
+    field(PREC, "1")
+}
+
+record(bo, "$(P):$(D):TEC:Enable")
+{
+    field(DESC, "TEC enable")
+    field(DTYP, "pydev")
+    field(OUT,  "@set_tec_enable(VAL)")
+    field(ZNAM, "Disable")
+    field(ONAM, "Enable")
+    field(VAL,  "1")
+    field(PINI, "YES")
+    field(FLNK, "$(P):$(D):TEC:Enable_RBV")
+}
+
+record(bi, "$(P):$(D):TEC:Enable_RBV")
+{
+    field(DESC, "TEC enable readback")
+    field(DTYP, "pydev")
+    field(INP,  "@get_tec_enable()")
+    field(SCAN, "5 second")
+    field(ZNAM, "Disabled")
+    field(ONAM, "Enabled")
+}
+
+record(bi, "$(P):$(D):TEC:Stable")
+{
+    field(DESC, "TEC temperature stable")
+    field(DTYP, "pydev")
+    field(INP,  "@get_tec_stable()")
+    field(SCAN, "5 second")
+    field(ZNAM, "Stabilizing")
+    field(ONAM, "Stable")
+    field(ZSV,  "MINOR")
+    field(OSV,  "NO_ALARM")
+}
+
+# ------------------------------------------------------------------
+# Boxcar width
+# ------------------------------------------------------------------
+
+record(longin, "$(P):$(D):BoxcarWidth")
+{
+    field(DESC, "Boxcar averaging width (0=off)")
+    field(DTYP, "pydev")
+    field(INP,  "@get_boxcar_width()")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+}
+
+record(longout, "$(P):$(D):setBoxcarWidth")
+{
+    field(DESC, "Set boxcar averaging width")
+    field(DTYP, "pydev")
+    field(OUT,  "@set_boxcar_width(VAL)")
+    field(DRVL, "0")
+    field(DRVH, "15")
+    field(VAL,  "0")
+    field(PINI, "YES")
+    field(FLNK, "$(P):$(D):BoxcarWidth")
+}
+
+# ------------------------------------------------------------------
+# Non-linearity correction
+# ------------------------------------------------------------------
+
+record(bi, "$(P):$(D):NonlinCorrect")
+{
+    field(DESC, "Non-linearity correction state")
+    field(DTYP, "pydev")
+    field(INP,  "@get_nonlin_correct()")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+    field(ZNAM, "Disabled")
+    field(ONAM, "Enabled")
+}
+
+record(bo, "$(P):$(D):setNonlinCorrect")
+{
+    field(DESC, "Enable non-linearity correction")
+    field(DTYP, "pydev")
+    field(OUT,  "@set_nonlin_correct(VAL)")
+    field(ZNAM, "Disable")
+    field(ONAM, "Enable")
+    field(VAL,  "1")
+    field(PINI, "YES")
+    field(FLNK, "$(P):$(D):NonlinCorrect")
+}
+
+# ------------------------------------------------------------------
+# Text-format file status (covers save_spectrum() txt saves)
+# HDF5 status is in OceanopticsHDF5.db (HDF1:WriteStatus_RBV)
+# ------------------------------------------------------------------
+
+record(mbbi, "$(P):$(D):FileStatus")
+{
+    field(DESC, "Last file operation status")
+    field(DTYP, "pydev")
+    field(INP,  "@get_file_status()")
+    field(SCAN, "1 second")
+
+    field(ZRVL, "0")  field(ZRST, "OK")         field(ZRSV, "NO_ALARM")
+    field(ONVL, "1")  field(ONST, "Dir missing") field(ONSV, "MAJOR")
+    field(TWVL, "2")  field(TWST, "Not writable") field(TWSV, "MAJOR")
+    field(THVL, "3")  field(THST, "Bad filename") field(THSV, "MINOR")
+    field(FRVL, "4")  field(FRST, "Save failed")  field(FRSV, "MAJOR")
+}

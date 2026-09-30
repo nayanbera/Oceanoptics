@@ -1,0 +1,61 @@
+#!../../bin/linux-x86_64/Oceanoptics
+
+#- SPDX-FileCopyrightText: 2000 Argonne National Laboratory
+#-
+#- SPDX-License-Identifier: EPICS
+
+#- You may have to change Oceanoptics to something else
+#- everywhere it appears in this file
+
+< envPaths
+
+# PYTHONPATH points to folders where Python modules are.
+epicsEnvSet("PYTHONPATH","$(TOP)/python")
+epicsEnvSet()
+
+# Setting the EPICS IOC shell prompt
+epicsEnvSet("IOCSH_PS1","iocUVVis>")
+
+cd "${TOP}"
+
+
+## Register all support components
+dbLoadDatabase "dbd/Oceanoptics.dbd"
+Oceanoptics_registerRecordDeviceDriver pdbbase
+
+## Soft MCA port -- requires drvSoftMca.dbd to be compiled into the IOC.
+## Uncomment these two lines once drvSoftMca is available in your mca build:
+#drvSoftMcaConfigure("QEPRO_MCA", 1044)
+
+## Load record instances
+#dbLoadTemplate "db/user.substitutions"
+dbLoadRecords "db/OceanopticsVersion.db", "user=chem_epics"
+#dbLoadRecords "db/dbSubExample.db", "user=chem_epics"
+dbLoadRecords "db/OceanopticsPV.db",    "P=15ID,D=UVVis"
+#dbLoadRecords "db/OceanopticsMCA.db",   "P=15ID,D=UVVis"  # requires drvSoftMca port
+dbLoadRecords "db/OceanopticsQEPro.db", "P=15ID,D=UVVis"
+dbLoadRecords "db/OceanopticsHDF5.db",  "P=15ID,D=UVVis"
+
+
+
+#- Set this to see messages from mySub
+#-var mySubDebug 1
+
+#- Run this to trace the stages of iocInit
+#-traceIocInit
+
+cd "${TOP}/iocBoot/${IOC}"
+
+pydev("import warnings")
+pydev("warnings.filterwarnings('ignore')")
+pydev("from pyOceanOptics import *")
+# Tell the MCA bridge which PV prefix to use for loopback CA push
+pydev("ioc_prefix = '15ID:UVVis:'")
+# Load the default NeXus XML layout from the iocBoot directory.
+# Working directory is ${TOP} at this point.
+pydev("hdf_set_xml_filename('iocBoot/iocOceanoptics/hdf5_layout.xml')")
+
+iocInit
+
+## Start any sequence programs
+#seq sncExample, "user=chem_epics"

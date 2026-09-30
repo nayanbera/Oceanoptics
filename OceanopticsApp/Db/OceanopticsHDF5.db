@@ -1,0 +1,416 @@
+# areaDetector HDF1-style plugin PVs for the QE Pro spectrometer IOC.
+# Load with:  dbLoadRecords "db/OceanopticsHDF5.db", "P=15ID,D=UVVis"
+#
+# PV prefix: $(P):$(D):HDF1:
+#
+# Write modes: 0=Single  1=Capture  2=Stream
+# Write status: 0=Idle  1=Writing  2=Error
+# XML valid: 0=Invalid  1=Valid
+
+# ------------------------------------------------------------------
+# File path
+# ------------------------------------------------------------------
+
+record(lso, "$(P):$(D):HDF1:FilePath")
+{
+    field(DESC, "HDF5 directory path")
+    field(DTYP, "pydev")
+    field(SIZV, "512")
+    field(OUT,  "@hdf_set_filepath(VAL)")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+}
+
+record(lsi, "$(P):$(D):HDF1:FilePath_RBV")
+{
+    field(DESC, "HDF5 directory path readback")
+    field(DTYP, "pydev")
+    field(SIZV, "512")
+    field(INP,  "@hdf_get_filepath()")
+    field(SCAN, "1 second")
+    field(PINI, "YES")
+}
+
+record(bi, "$(P):$(D):HDF1:FilePathExists_RBV")
+{
+    field(DESC, "HDF5 directory exists")
+    field(DTYP, "pydev")
+    field(INP,  "@hdf_get_filepath_exists()")
+    field(SCAN, "5 second")
+    field(ZNAM, "No")
+    field(ONAM, "Yes")
+    field(ZSV,  "MAJOR")
+    field(OSV,  "NO_ALARM")
+}
+
+# ------------------------------------------------------------------
+# File name and numbering
+# ------------------------------------------------------------------
+
+record(lso, "$(P):$(D):HDF1:FileName")
+{
+    field(DESC, "HDF5 base filename")
+    field(DTYP, "pydev")
+    field(SIZV, "256")
+    field(OUT,  "@hdf_set_filename(VAL)")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+}
+
+record(lsi, "$(P):$(D):HDF1:FileName_RBV")
+{
+    field(DESC, "HDF5 base filename readback")
+    field(DTYP, "pydev")
+    field(SIZV, "256")
+    field(INP,  "@hdf_get_filename()")
+    field(SCAN, "1 second")
+    field(PINI, "YES")
+}
+
+record(longout, "$(P):$(D):HDF1:FileNumber")
+{
+    field(DESC, "Next HDF5 file number")
+    field(DTYP, "pydev")
+    field(OUT,  "@hdf_set_filenumber(VAL)")
+    field(SCAN, "Passive")
+    field(DRVL, "0")
+    field(DRVH, "999999")
+    field(VAL,  "1")
+    field(PINI, "YES")
+}
+
+record(longin, "$(P):$(D):HDF1:FileNumber_RBV")
+{
+    field(DESC, "Next HDF5 file number readback")
+    field(DTYP, "pydev")
+    field(INP,  "@hdf_get_filenumber()")
+    field(SCAN, "1 second")
+}
+
+record(bo, "$(P):$(D):HDF1:AutoIncrement")
+{
+    field(DESC, "Auto-increment file number after write")
+    field(DTYP, "pydev")
+    field(OUT,  "@hdf_set_autoincrement(VAL)")
+    field(ZNAM, "No")
+    field(ONAM, "Yes")
+    field(VAL,  "1")
+    field(PINI, "YES")
+}
+
+record(bi, "$(P):$(D):HDF1:AutoIncrement_RBV")
+{
+    field(DESC, "Auto-increment readback")
+    field(DTYP, "pydev")
+    field(INP,  "@hdf_get_autoincrement()")
+    field(SCAN, "Passive")
+    field(ZNAM, "No")
+    field(ONAM, "Yes")
+}
+
+record(lso, "$(P):$(D):HDF1:FileTemplate")
+{
+    field(DESC, "HDF5 filename printf template")
+    field(DTYP, "pydev")
+    field(SIZV, "256")
+    field(OUT,  "@hdf_set_filetemplate(VAL)")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+}
+
+record(lsi, "$(P):$(D):HDF1:FileTemplate_RBV")
+{
+    field(DESC, "Filename template readback")
+    field(DTYP, "pydev")
+    field(SIZV, "256")
+    field(INP,  "@hdf_get_filetemplate()")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+}
+
+record(lsi, "$(P):$(D):HDF1:FullFileName_RBV")
+{
+    field(DESC, "Full path of last written HDF5 file")
+    field(DTYP, "pydev")
+    field(SIZV, "512")
+    field(INP,  "@hdf_get_fullfilename()")
+    field(SCAN, "1 second")
+}
+
+# ------------------------------------------------------------------
+# Write mode and control
+# ------------------------------------------------------------------
+
+record(mbbo, "$(P):$(D):HDF1:FileWriteMode")
+{
+    field(DESC, "Write mode")
+    field(DTYP, "pydev")
+    field(OUT,  "@hdf_set_writemode(VAL)")
+    field(ZRST, "Single")
+    field(ONST, "Capture")
+    field(TWST, "Stream")
+    field(ZRVL, "0")
+    field(ONVL, "1")
+    field(TWVL, "2")
+    field(VAL,  "0")
+    field(PINI, "YES")
+}
+
+record(mbbi, "$(P):$(D):HDF1:FileWriteMode_RBV")
+{
+    field(DESC, "Write mode readback")
+    field(DTYP, "pydev")
+    field(INP,  "@hdf_get_writemode()")
+    field(SCAN, "Passive")
+    field(ZRST, "Single")
+    field(ONST, "Capture")
+    field(TWST, "Stream")
+    field(ZRVL, "0")
+    field(ONVL, "1")
+    field(TWVL, "2")
+}
+
+record(longout, "$(P):$(D):HDF1:NumCapture")
+{
+    field(DESC, "Frames to capture (0=unlimited)")
+    field(DTYP, "pydev")
+    field(OUT,  "@hdf_set_numcapture(VAL)")
+    field(DRVL, "0")
+    field(DRVH, "100000")
+    field(VAL,  "1")
+    field(PINI, "YES")
+}
+
+record(longin, "$(P):$(D):HDF1:NumCapture_RBV")
+{
+    field(DESC, "Frames to capture readback")
+    field(DTYP, "pydev")
+    field(INP,  "@hdf_get_numcapture()")
+    field(SCAN, "Passive")
+}
+
+record(longin, "$(P):$(D):HDF1:NumCaptured_RBV")
+{
+    field(DESC, "Frames captured so far")
+    field(DTYP, "pydev")
+    field(INP,  "@hdf_get_numcaptured()")
+    field(SCAN, "1 second")
+}
+
+record(bo, "$(P):$(D):HDF1:Capture")
+{
+    field(DESC, "Start (1) / stop (0) capture or stream")
+    field(DTYP, "pydev")
+    field(OUT,  "@hdf_set_capture(VAL)")
+    field(ZNAM, "Done")
+    field(ONAM, "Capture")
+    field(FLNK, "$(P):$(D):HDF1:Capture_RBV")
+}
+
+record(bi, "$(P):$(D):HDF1:Capture_RBV")
+{
+    field(DESC, "Capture active readback")
+    field(DTYP, "pydev")
+    field(INP,  "@hdf_get_capture()")
+    field(SCAN, "1 second")
+    field(ZNAM, "Done")
+    field(ONAM, "Capturing")
+    field(OSV,  "MINOR")
+}
+
+record(bo, "$(P):$(D):HDF1:AutoSave")
+{
+    field(DESC, "Auto-save HDF5 after each spectrum")
+    field(DTYP, "pydev")
+    field(OUT,  "@hdf_set_autosave(VAL)")
+    field(ZNAM, "No")
+    field(ONAM, "Yes")
+    field(VAL,  "0")
+    field(PINI, "YES")
+    field(FLNK, "$(P):$(D):HDF1:AutoSave_RBV")
+}
+
+record(bi, "$(P):$(D):HDF1:AutoSave_RBV")
+{
+    field(DESC, "AutoSave readback")
+    field(DTYP, "pydev")
+    field(INP,  "@hdf_get_autosave()")
+    field(SCAN, "Passive")
+    field(ZNAM, "No")
+    field(ONAM, "Yes")
+}
+
+record(bo, "$(P):$(D):HDF1:WriteFile")
+{
+    field(DESC, "Write HDF5 file now (immediate)")
+    field(DTYP, "pydev")
+    field(OUT,  "@hdf_writefile()")
+    field(ZNAM, "Done")
+    field(ONAM, "Write")
+    field(FLNK, "$(P):$(D):HDF1:WriteStatus_RBV")
+}
+
+record(mbbi, "$(P):$(D):HDF1:WriteStatus_RBV")
+{
+    field(DESC, "HDF5 write status")
+    field(DTYP, "pydev")
+    field(INP,  "@hdf_get_write_status()")
+    field(SCAN, "1 second")
+    field(ZRST, "Idle")    field(ZRSV, "NO_ALARM")
+    field(ONST, "Writing") field(ONSV, "MINOR")
+    field(TWST, "Error")   field(TWSV, "MAJOR")
+    field(ZRVL, "0")
+    field(ONVL, "1")
+    field(TWVL, "2")
+}
+
+record(lsi, "$(P):$(D):HDF1:WriteMessage_RBV")
+{
+    field(DESC, "HDF5 write status message")
+    field(DTYP, "pydev")
+    field(SIZV, "512")
+    field(INP,  "@hdf_get_write_message()")
+    field(SCAN, "1 second")
+}
+
+record(bi, "$(P):$(D):HDF1:Available_RBV")
+{
+    field(DESC, "h5py installed (HDF5 available)")
+    field(DTYP, "pydev")
+    field(INP,  "@hdf_get_available()")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+    field(ZNAM, "No (h5py missing)")
+    field(ONAM, "Yes")
+    field(ZSV,  "MAJOR")
+    field(OSV,  "NO_ALARM")
+}
+
+# ------------------------------------------------------------------
+# XML layout file
+# ------------------------------------------------------------------
+
+record(lso, "$(P):$(D):HDF1:XMLFileName")
+{
+    field(DESC, "HDF5 layout XML file path")
+    field(DTYP, "pydev")
+    field(SIZV, "512")
+    field(OUT,  "@hdf_set_xml_filename(VAL)")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+}
+
+record(lsi, "$(P):$(D):HDF1:XMLFileName_RBV")
+{
+    field(DESC, "HDF5 layout XML file path readback")
+    field(DTYP, "pydev")
+    field(SIZV, "512")
+    field(INP,  "@hdf_get_xml_filename()")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+}
+
+record(bi, "$(P):$(D):HDF1:XMLValid_RBV")
+{
+    field(DESC, "XML layout file valid")
+    field(DTYP, "pydev")
+    field(INP,  "@hdf_get_xml_valid()")
+    field(SCAN, "Passive")
+    field(ZNAM, "Invalid")
+    field(ONAM, "Valid")
+    field(ZSV,  "MINOR")
+    field(OSV,  "NO_ALARM")
+}
+
+record(lsi, "$(P):$(D):HDF1:XMLErrorMsg_RBV")
+{
+    field(DESC, "XML parse error message")
+    field(DTYP, "pydev")
+    field(SIZV, "512")
+    field(INP,  "@hdf_get_xml_error()")
+    field(SCAN, "Passive")
+}
+
+# ------------------------------------------------------------------
+# NDAttributes: user-settable metadata injected into every HDF5 file
+# ------------------------------------------------------------------
+
+record(lso, "$(P):$(D):HDF1:Attr:SampleName")
+{
+    field(DESC, "Sample name (written to HDF5)")
+    field(DTYP, "pydev")
+    field(SIZV, "256")
+    field(OUT,  "@hdf_set_attr_sample_name(VAL)")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+}
+
+record(lsi, "$(P):$(D):HDF1:Attr:SampleName_RBV")
+{
+    field(DESC, "Sample name readback")
+    field(DTYP, "pydev")
+    field(SIZV, "256")
+    field(INP,  "@hdf_get_attr_sample_name()")
+    field(SCAN, "Passive")
+}
+
+record(lso, "$(P):$(D):HDF1:Attr:SampleDescription")
+{
+    field(DESC, "Sample description (written to HDF5)")
+    field(DTYP, "pydev")
+    field(SIZV, "256")
+    field(OUT,  "@hdf_set_attr_sample_desc(VAL)")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+}
+
+record(lsi, "$(P):$(D):HDF1:Attr:SampleDescription_RBV")
+{
+    field(DESC, "Sample description readback")
+    field(DTYP, "pydev")
+    field(SIZV, "256")
+    field(INP,  "@hdf_get_attr_sample_desc()")
+    field(SCAN, "Passive")
+}
+
+record(ao, "$(P):$(D):HDF1:Attr:BeamEnergy")
+{
+    field(DESC, "Beam energy in keV (written to HDF5)")
+    field(DTYP, "pydev")
+    field(OUT,  "@hdf_set_attr_beam_energy(VAL)")
+    field(EGU,  "keV")
+    field(PREC, "4")
+    field(DRVL, "0")
+    field(DRVH, "100")
+    field(VAL,  "0")
+    field(PINI, "YES")
+}
+
+record(ai, "$(P):$(D):HDF1:Attr:BeamEnergy_RBV")
+{
+    field(DESC, "Beam energy readback")
+    field(DTYP, "pydev")
+    field(INP,  "@hdf_get_attr_beam_energy()")
+    field(EGU,  "keV")
+    field(PREC, "4")
+    field(SCAN, "Passive")
+}
+
+record(lso, "$(P):$(D):HDF1:Attr:ExposureMode")
+{
+    field(DESC, "Exposure mode (written to HDF5)")
+    field(DTYP, "pydev")
+    field(SIZV, "64")
+    field(OUT,  "@hdf_set_attr_exposure_mode(VAL)")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+}
+
+record(lsi, "$(P):$(D):HDF1:Attr:ExposureMode_RBV")
+{
+    field(DESC, "Exposure mode readback")
+    field(DTYP, "pydev")
+    field(SIZV, "64")
+    field(INP,  "@hdf_get_attr_exposure_mode()")
+    field(SCAN, "Passive")
+}

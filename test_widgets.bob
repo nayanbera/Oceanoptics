@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<display version="2.0.0">
+  <name>Widget Test</name>
+  <width>600</width>
+  <height>200</height>
+
+  <widget type="label" version="2.0.0">
+    <name>Lbl1</name>
+    <x>10</x><y>10</y><width>150</width><height>25</height>
+    <text>text_update test:</text>
+  </widget>
+
+  <widget type="text_update" version="2.0.0">
+    <name>TU1</name>
+    <x>170</x><y>10</y><width>150</width><height>25</height>
+    <pv_name>15ID:UVVis:IntegrationTime</pv_name>
+  </widget>
+
+  <widget type="label" version="2.0.0">
+    <name>Lbl2</name>
+    <x>10</x><y>50</y><width>150</width><height>25</height>
+    <text>text_entry test:</text>
+  </widget>
+
+  <widget type="text_entry" version="2.0.0">
+    <name>TE1</name>
+    <x>170</x><y>50</y><width>150</width><height>25</height>
+    <pv_name>15ID:UVVis:setIntegrationTime</pv_name>
+  </widget>
+
+  <widget type="label" version="2.0.0">
+    <name>Lbl3</name>
+    <x>10</x><y>90</y><width>150</width><height>25</height>
+    <text>choice_button test:</text>
+  </widget>
+
+  <widget type="choice_button" version="2.0.0">
+    <name>CB1</name>
+    <x>170</x><y>90</y><width>150</width><height>25</height>
+    <pv_name>15ID:UVVis:TEC:Enable</pv_name>
+  </widget>
+
+</display>
