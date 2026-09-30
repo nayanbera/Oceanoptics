@@ -1,0 +1,418 @@
+#Database for Oceanoptics Spectrometer
+
+record(longin, "$(P):$(D):IntegrationTime")
+{
+    field(DTYP, "pydev")
+    field(INP, "@get_integration_time()")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+    field(EGU, "usec")
+}
+
+record(longout,"$(P):$(D):setIntegrationTime")
+{
+    field(DTYP, "pydev")
+    field(OUT, "@set_integration_time(VAL)")
+    field(EGU, "usec")
+    field(DRVL, "8000")
+    field(DRVH, "100000000")
+    field(FLNK, "$(P):$(D):IntegrationTime")
+}
+
+record(longout, "$(P):$(D):setScanNum")
+{
+    field(DTYP, "pydev")
+    field(OUT, "@set_scans_to_average(VAL)")
+    field(DRVL, "0")
+    field(DRVH, "10000")
+    field(FLNK, "$(P):$(D):ScanNum")
+}
+
+record(longin, "$(P):$(D):ScanNum")
+{
+    field(DTYP, "pydev")
+    field(INP, "@get_scans_to_average()")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+}
+
+record(bo, "$(P):$(D):Lamp")
+{
+    field(DTYP, "pydev")
+    field(OUT, "@lamp_on(VAL)")
+    field(ONAM, "True")
+    field(ZNAM, "False")
+    field(FLNK, "$(P):$(D):LampStatus")
+}
+
+# NOTE: this reads adv.get_enable_lamp(), i.e. the Lamp Enable line. It
+# reports what was last COMMANDED, not what either lamp is doing. The real
+# lamp state is D2_STATUS / HAL_STATUS below.
+record(bi, "$(P):$(D):LampStatus")
+{
+    field(DTYP, "pydev")
+    field(INP, "@get_lamp_status()")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+    field(ONAM, "True")
+    field(ZNAM, "False")
+}
+
+
+record(lso, "$(P):$(D):setDataDir")
+{
+    field(DTYP, "pydev")
+    field(SIZV, "512")
+    field(OUT, "@set_data_dir(VAL)")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+}
+
+
+record(lsi, "$(P):$(D):DataDir")
+{
+    field(DTYP, "pydev")
+    field(SIZV, "512")
+    field(INP, "@get_datadir()")
+    field(SCAN, "1 second")
+    field(PINI, "YES")
+}
+
+record(lso, "$(P):$(D):setFileName")
+{
+    field(DTYP, "pydev")
+    field(SIZV, "512")
+    field(OUT, "@set_filename(VAL)")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+}
+
+record(stringout, "$(P):$(D):SaveData")
+{
+    field(DTYP, "pydev")
+    field(OUT,  "@save_spectrum()")
+    field(SCAN, "Passive")
+
+}
+
+record(lsi, "$(P):$(D):FileName")
+{
+    field(DTYP, "pydev")
+    field(SIZV, "512")
+    field(INP, "@get_filename()")
+    field(SCAN, "1 second")
+    field(PINI, "YES")
+}
+
+
+record(lsi, "$(P):$(D):Message")
+{
+    field(DTYP, "pydev")
+    field(SIZV, "1024")
+    field(INP, "@get_message()")
+    field(SCAN, "1 second")
+    field(PINI, "YES")
+}
+
+record(waveform, "$(P):$(D):DarkSpectrum")
+{
+    field(DTYP, "pydev")
+    field(INP, "@get_dark_spectrum()")
+    field(SCAN, "Passive")
+    field(NELM, "1044")
+    field(FTVL, "DOUBLE")
+}
+
+record(waveform, "$(P):$(D):ReferenceSpectrum")
+{
+    field(DTYP, "pydev")
+    field(INP, "@get_reference_spectrum()")
+    field(SCAN, "Passive")
+    field(NELM, "1044")
+    field(FTVL, "DOUBLE")
+}
+
+record(waveform, "$(P):$(D):Spectrum")
+{
+    field(DTYP, "pydev")
+    field(INP,  "@get_spectrum()")
+    field(SCAN, "Passive")
+    field(NELM, "1044")
+    field(FTVL, "DOUBLE")
+    field(FLNK, "$(P):$(D):UVVis.PROC")
+}
+
+
+record(waveform, "$(P):$(D):UVVis")
+{
+    field(DTYP, "pydev")
+    field(INP,  "@get_uv_vis_abs()")
+    field(SCAN, "Passive")
+    field(NELM, "1044")
+    field(FTVL, "DOUBLE")
+    field(FLNK, "$(P):$(D):ROI_Int.PROC")
+}
+
+
+record(waveform, "$(P):$(D):Wavelengths")
+{
+    field(DTYP, "pydev")
+#    field(SCAN, "1 second")
+    field(NELM, "1044")
+    field(FTVL, "DOUBLE")
+    field(INP, "@get_wavelengths()")
+    field(PINI, "YES")
+}
+
+record(longout, "$(P):$(D):D2_TOGGLE")
+{
+    field(DTYP, "pydev")
+    field(OUT, "@toggle_d2()")
+    field(FLNK, "$(P):$(D):D2_ProbeFan")
+}
+
+record(longout, "$(P):$(D):HAL_TOGGLE")
+{
+    field(DTYP, "pydev")
+    field(OUT, "@toggle_halogen()")
+    field(FLNK, "$(P):$(D):LampProbeSettle")
+}
+
+record(longout, "$(P):$(D):ROIStart")
+{
+    field(DESC, "First included ROI pixel")
+    field(DTYP, "pydev")
+    field(OUT,  "@set_roi_start(VAL)")
+
+    field(VAL,  "0")
+    field(DRVL, "0")
+    field(DRVH, "$(NPIX=2048)")
+    field(HOPR, "$(NPIX=2048)")
+    field(LOPR, "0")
+
+    field(FLNK, "$(P):$(D):ROI_Int.PROC")
+}
+
+
+record(longout, "$(P):$(D):ROIStop")
+{
+    field(DESC, "First excluded ROI pixel")
+    field(DTYP, "pydev")
+    field(OUT,  "@set_roi_stop(VAL)")
+
+    field(VAL,  "$(NPIX=2048)")
+    field(DRVL, "1")
+    field(DRVH, "$(NPIX=2048)")
+    field(HOPR, "$(NPIX=2048)")
+    field(LOPR, "1")
+
+    field(FLNK, "$(P):$(D):ROI_Int.PROC")
+}
+
+
+record(ai, "$(P):$(D):ROI_Int")
+{
+    field(DESC, "Integrated ROI intensity")
+    field(DTYP, "pydev")
+    field(INP,  "@get_roi_intensity()")
+
+    field(EGU,  "counts")
+    field(PREC, "0")
+    field(LOPR, "0")
+    field(HOPR, "1000000000")
+
+    field(SCAN, "Passive")
+    field(FLNK, "$(P):$(D):ROI_Abs.PROC")
+}
+
+record(ai, "$(P):$(D):ROI_Abs")
+{
+    field(DESC, "Integrated ROI absorbance")
+    field(DTYP, "pydev")
+    field(INP,  "@get_roi_absorbance()")
+
+    field(EGU,  "counts")
+    field(PREC, "0")
+    field(LOPR, "0")
+    field(HOPR, "1000000000")
+
+    field(SCAN, "Passive")
+}
+
+
+# ======================================================================
+# DH-2000 lamp status readbacks
+# ======================================================================
+# Read from the lamp's own open-collector status lines via the QE Pro GPIO
+# inputs, so these report what the lamps are ACTUALLY doing -- unlike
+# LampStatus above, which only echoes the last Lamp Enable command.
+#
+#   D_GOOD    GPIO 3  ->  D2_STATUS
+#   HAL_GOOD  GPIO 4  ->  HAL_STATUS
+#   D_BAD     GPIO 2  ->  D2_FAULT
+#   HAL_BAD   GPIO 1  ->  HAL_FAULT
+#   SHTR_STAT GPIO 5  ->  SHUTTER_STATUS   (mapping predicted, not measured)
+#
+# Every one is Passive. Only D2_STATUS carries PINI, and it forward-links
+# through the whole chain, so startup costs exactly ONE probe of the
+# hardware rather than six. Re-probe by processing D2_STATUS, or by
+# processing LampProbe.
+#
+# Deliberately NOT scanned periodically: each probe samples the GPIO for up
+# to 0.55 s, which is needed to distinguish a blinking warm-up line from a
+# steady one, and that blocks the record-processing thread for the duration.
+
+# --- the probe chain --------------------------------------------------
+# Processing this record re-reads all five lines. The four records after it
+# are served from the same cached sample, so the whole chain costs one
+# hardware read.
+record(longin, "$(P):$(D):D2_GOOD")
+{
+    field(DESC, "D_GOOD 0clr 1on 2warm 3unk")
+    field(DTYP, "pydev")
+    field(INP,  "@get_d2_good()")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+    field(FLNK, "$(P):$(D):D2_BAD")
+}
+
+record(longin, "$(P):$(D):D2_BAD")
+{
+    field(DESC, "D_BAD 0clr 1fault 2unk")
+    field(DTYP, "pydev")
+    field(INP,  "@get_d2_bad()")
+    field(SCAN, "Passive")
+    field(FLNK, "$(P):$(D):D2_IND_CODE")
+}
+
+record(calc, "$(P):$(D):D2_IND_CODE")
+{
+    field(DESC, "Deuterium indicator 0-4")
+    field(INPA, "$(P):$(D):D2_GOOD NPP NMS")
+    field(INPB, "$(P):$(D):D2_BAD NPP NMS")
+    field(CALC, "(A>2)||(B>1)?4:(B?3:(A>1?2:(A?1:0)))")
+    field(SCAN, "Passive")
+    field(FLNK, "$(P):$(D):D2_IND")
+}
+
+record(mbbi, "$(P):$(D):D2_IND")
+{
+    field(DESC, "Deuterium lamp indicator")
+    field(DTYP, "Raw Soft Channel")
+    field(INP,  "$(P):$(D):D2_IND_CODE NPP MS")
+    field(SCAN, "Passive")
+
+    field(ZRVL, "0")  field(ZRST, "Off")  field(ZRSV, "NO_ALARM")
+    field(ONVL, "1")  field(ONST, "On")  field(ONSV, "NO_ALARM")
+    field(TWVL, "2")  field(TWST, "Warming up")  field(TWSV, "MINOR")
+    field(THVL, "3")  field(THST, "Fault")  field(THSV, "MAJOR")
+    field(FRVL, "4")  field(FRST, "Unknown")  field(FRSV, "INVALID")
+
+    field(FLNK, "$(P):$(D):HAL_GOOD")
+}
+
+record(longin, "$(P):$(D):HAL_GOOD")
+{
+    field(DESC, "HAL_GOOD 0clr 1on 2warm 3unk")
+    field(DTYP, "pydev")
+    field(INP,  "@get_halogen_good()")
+    field(SCAN, "Passive")
+    field(FLNK, "$(P):$(D):HAL_BAD")
+}
+
+record(longin, "$(P):$(D):HAL_BAD")
+{
+    field(DESC, "HAL_BAD 0clr 1fault 2unk")
+    field(DTYP, "pydev")
+    field(INP,  "@get_halogen_bad()")
+    field(SCAN, "Passive")
+    field(FLNK, "$(P):$(D):HAL_IND_CODE")
+}
+
+record(calc, "$(P):$(D):HAL_IND_CODE")
+{
+    field(DESC, "Halogen indicator 0-4")
+    field(INPA, "$(P):$(D):HAL_GOOD NPP NMS")
+    field(INPB, "$(P):$(D):HAL_BAD NPP NMS")
+    field(CALC, "(A>2)||(B>1)?4:(B?3:(A>1?2:(A?1:0)))")
+    field(SCAN, "Passive")
+    field(FLNK, "$(P):$(D):HAL_IND")
+}
+
+record(mbbi, "$(P):$(D):HAL_IND")
+{
+    field(DESC, "Halogen lamp indicator")
+    field(DTYP, "Raw Soft Channel")
+    field(INP,  "$(P):$(D):HAL_IND_CODE NPP MS")
+    field(SCAN, "Passive")
+
+    field(ZRVL, "0")  field(ZRST, "Off")  field(ZRSV, "NO_ALARM")
+    field(ONVL, "1")  field(ONST, "On")  field(ONSV, "NO_ALARM")
+    field(TWVL, "2")  field(TWST, "Warming up")  field(TWSV, "MINOR")
+    field(THVL, "3")  field(THST, "Fault")  field(THSV, "MAJOR")
+    field(FRVL, "4")  field(FRST, "Unknown")  field(FRSV, "INVALID")
+
+    field(FLNK, "$(P):$(D):LampStatusText")
+}
+
+record(lsi, "$(P):$(D):LampStatusText")
+{
+    field(DESC, "One-line lamp summary")
+    field(DTYP, "pydev")
+    field(SIZV, "128")
+    field(INP,  "@get_lamp_status_text()")
+    field(SCAN, "Passive")
+}
+
+
+# --- triggers ---------------------------------------------------------
+# "Probe now" button. Process this (or D2_STATUS directly) to refresh
+# everything on demand.
+record(calcout, "$(P):$(D):LampProbe")
+{
+    field(DESC, "Re-read all lamp status lines")
+    field(SCAN, "Passive")
+    field(CALC, "1")
+    field(DOPT, "Use CALC")
+    field(OOPT, "Every Time")
+    field(OUT,  "$(P):$(D):D2_GOOD.PROC")
+}
+
+# Post-toggle probe. _pulse_gpio returns 0.6 s after the pulse starts, but
+# the halogen needs 1-2 s to light and the deuterium about 20 s. Probing
+# immediately would read the OLD state, so the toggles forward here and
+# ODLY defers the read. ODLY uses a callback, so the IOC is not blocked.
+record(calcout, "$(P):$(D):LampProbeSettle")
+{
+    field(DESC, "Probe after lamp settles")
+    field(SCAN, "Passive")
+    field(CALC, "1")
+    field(DOPT, "Use CALC")
+    field(OOPT, "Every Time")
+    field(ODLY, "3")
+    field(OUT,  "$(P):$(D):LampProbe.PROC")
+}
+
+# Second look once the deuterium warm-up blink should have finished, so
+# D2_STATUS settles from "Warming up" to "On" without anyone clicking
+# anything. Only the D2 toggle triggers this.
+record(calcout, "$(P):$(D):LampProbeWarm")
+{
+    field(DESC, "Probe after deuterium warm-up completes")
+    field(SCAN, "Passive")
+    field(CALC, "1")
+    field(DOPT, "Use CALC")
+    field(OOPT, "Every Time")
+    field(ODLY, "30")
+    field(OUT,  "$(P):$(D):LampProbe.PROC")
+}
+
+# D2 gets both: one probe at 3 s to catch the warm-up blink, another at 30 s
+# to catch the settled state.
+record(fanout, "$(P):$(D):D2_ProbeFan")
+{
+    field(DESC, "D2 toggle: settle + warm probes")
+    field(SCAN, "Passive")
+    field(LNK1, "$(P):$(D):LampProbeSettle")
+    field(LNK2, "$(P):$(D):LampProbeWarm")
+}

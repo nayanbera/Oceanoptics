@@ -14,6 +14,7 @@ DB += dbExample2.db
 DB += OceanopticsVersion.db
 DB += dbSubExample.db
 DB += user.substitutions
+DB += OceanopticsPV.db
 DB += OceanopticsMCA.db
 DB += OceanopticsQEPro.db
 DB += OceanopticsHDF5.db

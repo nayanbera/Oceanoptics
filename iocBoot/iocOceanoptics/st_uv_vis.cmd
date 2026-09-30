@@ -11,7 +11,6 @@
 
 # PYTHONPATH points to folders where Python modules are.
 epicsEnvSet("PYTHONPATH","$(TOP)/python")
-epicsEnvSet()
 
 # Setting the EPICS IOC shell prompt
 epicsEnvSet("IOCSH_PS1","iocUVVis>")
