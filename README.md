@@ -54,10 +54,28 @@ git clone https://github.com/nayanbera/Oceanoptics
 
 ### 2. Install the OceanDirect SDK
 
-Download the OceanDirect SDK from Ocean Optics and place the shared library where the Python package can find it:
+The Python package (`oceandirect/sdk_properties.py`) always looks for the shared library at a fixed relative path:
+
+```
+python/oceandirect/lib/liboceandirect.so   (Linux)
+python/oceandirect/lib/liboceandirect.dylib  (macOS)
+```
+
+**Option A — copy/symlink the library there** (recommended):
 
 ```bash
+mkdir -p Oceanoptics/python/oceandirect/lib
+# Copy:
 cp /path/to/sdk/liboceandirect.so Oceanoptics/python/oceandirect/lib/
+# Or symlink if the SDK is already installed elsewhere on the machine:
+ln -s /existing/path/to/liboceandirect.so Oceanoptics/python/oceandirect/lib/liboceandirect.so
+```
+
+**Option B — edit `sdk_properties.py`** to point at the existing installation directly:
+
+```python
+# At the bottom of python/oceandirect/sdk_properties.py, replace the last line with:
+oceandirect_dll = "/usr/local/lib/liboceandirect.so"   # adjust to your actual path
 ```
 
 Install the required Python packages into the Python environment used by PyDevice:
