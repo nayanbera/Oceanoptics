@@ -1043,6 +1043,8 @@ def _update_mca(data):
             _mca_pv = epics.PV(ioc_prefix + "MCA1.VAL", auto_monitor=False)
         except Exception:
             return
+    if not _mca_pv.connected:
+        return
     try:
         _mca_pv.put(list(data), wait=False)
     except Exception:
