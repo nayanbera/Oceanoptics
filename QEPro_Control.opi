@@ -5,7 +5,7 @@
     <min_width>-1</min_width>
     <min_height>-1</min_height>
   </auto_scale_widgets>
-  <height>950</height>
+  <height>1450</height>
   <width>1100</width>
   <bg_color><color red="240" green="240" blue="240"/></bg_color>
   <show_grid>false</show_grid>
@@ -1186,6 +1186,601 @@
     <pv_name>15ID:UVVis:HDF1:Attr:ExposureMode_RBV</pv_name>
     <border_style>1</border_style>
     <foreground_color><color red="0" green="0" blue="150"/></foreground_color>
+  </widget>
+
+
+  <!-- ===== MCA (pydev waveform interface) (x=10 y=940 w=1080 h=490) ===== -->
+  <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0.0">
+    <name>MCA Rect</name>
+    <x>10</x><y>940</y><width>1080</width><height>490</height>
+    <bg_color><color red="255" green="250" blue="220"/></bg_color>
+    <foreground_color><color red="160" green="140" blue="40"/></foreground_color>
+    <line_width>2</line_width>
+    <fill>true</fill>
+    <border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>MCA Title</name>
+    <x>16</x><y>943</y><width>680</width><height>20</height>
+    <text>MCA  (15ID:UVVis:MCA1 — waveform updated automatically by Get Spectrum / Acquire MCA Now)</text>
+    <transparent>true</transparent>
+    <border_style>0</border_style>
+    <font><fontdata fontName="Liberation Sans" height="11" style="1"/></font>
+    <foreground_color><color red="80" green="60" blue="0"/></foreground_color>
+  </widget>
+
+  <!-- MCA Spectrum Plot x=10 y=963 w=700 h=260 -->
+  <widget typeId="org.csstudio.opibuilder.widgets.xyGraph" version="1.0.0">
+    <name>MCA Plot</name>
+    <x>10</x><y>963</y><width>700</width><height>260</height>
+    <title>MCA Spectrum</title>
+    <show_toolbar>true</show_toolbar>
+    <axis_0_axis_title>Wavelength (nm)</axis_0_axis_title>
+    <axis_0_auto_scale>true</axis_0_auto_scale>
+    <axis_0_show_grid>true</axis_0_show_grid>
+    <axis_1_axis_title>Counts</axis_1_axis_title>
+    <axis_1_auto_scale>true</axis_1_auto_scale>
+    <axis_1_show_grid>true</axis_1_show_grid>
+    <trace_count>1</trace_count>
+    <trace_0_name>MCA</trace_0_name>
+    <trace_0_x_pv>15ID:UVVis:Wavelengths</trace_0_x_pv>
+    <trace_0_y_pv>15ID:UVVis:MCA1</trace_0_y_pv>
+    <trace_0_trace_color><color red="21" green="21" blue="196"/></trace_0_trace_color>
+    <trace_0_line_width>2</trace_0_line_width>
+    <trace_0_trace_type>0</trace_0_trace_type>
+    <border_style>0</border_style>
+  </widget>
+
+  <!-- Acquire MCA + Read Status buttons (below plot) y=1228 -->
+  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="1.0.0">
+    <name>Acquire MCA</name>
+    <x>10</x><y>1228</y><width>168</width><height>28</height>
+    <text>Acquire MCA Now</text>
+    <bg_color><color red="0" green="100" blue="200"/></bg_color>
+    <foreground_color><color red="255" green="255" blue="255"/></foreground_color>
+    <border_style>0</border_style>
+    <actions hook="false" hook_all="true">
+      <action type="WRITE_PV">
+        <pv_name>15ID:UVVis:MCA1.PROC</pv_name>
+        <value>1</value><timeout>10</timeout><confirm_message/><description>Acquire MCA spectrum</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>15ID:UVVis:MCA1_ERTM.PROC</pv_name>
+        <value>1</value><timeout>5</timeout><confirm_message/><description>Update real time</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>15ID:UVVis:MCA1_ACQG.PROC</pv_name>
+        <value>1</value><timeout>5</timeout><confirm_message/><description>Update acquiring flag</description>
+      </action>
+    </actions>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="1.0.0">
+    <name>Read MCA Status</name>
+    <x>184</x><y>1228</y><width>158</width><height>28</height>
+    <text>Read ERTM / Status</text>
+    <bg_color><color red="0" green="110" blue="110"/></bg_color>
+    <foreground_color><color red="255" green="255" blue="255"/></foreground_color>
+    <border_style>0</border_style>
+    <actions hook="false" hook_all="true">
+      <action type="WRITE_PV">
+        <pv_name>15ID:UVVis:MCA1_ERTM.PROC</pv_name>
+        <value>1</value><timeout>5</timeout><confirm_message/><description>Read elapsed real time</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>15ID:UVVis:MCA1_ACQG.PROC</pv_name>
+        <value>1</value><timeout>5</timeout><confirm_message/><description>Read acquiring flag</description>
+      </action>
+    </actions>
+  </widget>
+
+  <!-- ===== MCA STATUS BOX (x=720 y=963 w=370 h=104) ===== -->
+  <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0.0">
+    <name>MCA Status Rect</name>
+    <x>720</x><y>963</y><width>370</width><height>104</height>
+    <bg_color><color red="220" green="232" blue="248"/></bg_color>
+    <foreground_color><color red="80" green="120" blue="180"/></foreground_color>
+    <line_width>2</line_width>
+    <fill>true</fill>
+    <border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>MCA Status Title</name>
+    <x>726</x><y>966</y><width>220</width><height>20</height>
+    <text>MCA Status</text>
+    <transparent>true</transparent>
+    <border_style>0</border_style>
+    <font><fontdata fontName="Liberation Sans" height="11" style="1"/></font>
+    <foreground_color><color red="0" green="0" blue="100"/></foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>ERTM Lbl</name>
+    <x>726</x><y>990</y><width>80</width><height>20</height>
+    <text>Real Time:</text>
+    <transparent>true</transparent>
+    <border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+    <name>ERTM RBV</name>
+    <x>809</x><y>988</y><width>72</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_ERTM</pv_name>
+    <precision>3</precision>
+    <border_style>1</border_style>
+    <foreground_color><color red="0" green="0" blue="150"/></foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>ERTM unit</name>
+    <x>885</x><y>990</y><width>18</width><height>20</height>
+    <text>s</text>
+    <transparent>true</transparent>
+    <border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.LED" version="1.0.0">
+    <name>ACQG LED</name>
+    <x>726</x><y>1018</y><width>18</width><height>18</height>
+    <pv_name>15ID:UVVis:MCA1_ACQG</pv_name>
+    <on_color><color red="0" green="200" blue="0"/></on_color>
+    <off_color><color red="160" green="160" blue="160"/></off_color>
+    <border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>ACQG Lbl</name>
+    <x>748</x><y>1015</y><width>60</width><height>20</height>
+    <text>Acquiring</text>
+    <transparent>true</transparent>
+    <border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+    <name>ACQG State</name>
+    <x>812</x><y>1015</y><width>68</width><height>20</height>
+    <pv_name>15ID:UVVis:MCA1_ACQG</pv_name>
+    <border_style>0</border_style>
+    <transparent>true</transparent>
+    <foreground_color><color red="0" green="80" blue="0"/></foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>ELTM Lbl</name>
+    <x>726</x><y>1044</y><width>80</width><height>20</height>
+    <text>Live Time:</text>
+    <transparent>true</transparent>
+    <border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+    <name>ELTM RBV</name>
+    <x>809</x><y>1042</y><width>72</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_ELTM</pv_name>
+    <precision>3</precision>
+    <border_style>1</border_style>
+    <foreground_color><color red="0" green="0" blue="150"/></foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>ELTM unit</name>
+    <x>885</x><y>1044</y><width>18</width><height>20</height>
+    <text>s</text>
+    <transparent>true</transparent>
+    <border_style>0</border_style>
+  </widget>
+
+  <!-- ===== MCA CALIBRATION BOX (x=720 y=1071 w=370 h=90) ===== -->
+  <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0.0">
+    <name>MCA Cal Rect</name>
+    <x>720</x><y>1071</y><width>370</width><height>90</height>
+    <bg_color><color red="238" green="248" blue="220"/></bg_color>
+    <foreground_color><color red="100" green="150" blue="60"/></foreground_color>
+    <line_width>2</line_width>
+    <fill>true</fill>
+    <border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>MCA Cal Title</name>
+    <x>726</x><y>1074</y><width>356</width><height>20</height>
+    <text>Energy Calibration  (E = CALO + CALS × ch)</text>
+    <transparent>true</transparent>
+    <border_style>0</border_style>
+    <font><fontdata fontName="Liberation Sans" height="11" style="1"/></font>
+    <foreground_color><color red="0" green="80" blue="0"/></foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>CALO Lbl</name>
+    <x>726</x><y>1097</y><width>52</width><height>20</height>
+    <text>Offset:</text>
+    <transparent>true</transparent>
+    <border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>CALO Entry</name>
+    <x>781</x><y>1095</y><width>75</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_CALO</pv_name>
+    <format_type>1</format_type>
+    <precision>4</precision>
+    <border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>CALO unit</name>
+    <x>860</x><y>1097</y><width>25</width><height>20</height>
+    <text>eV</text>
+    <transparent>true</transparent>
+    <border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>CALS Lbl</name>
+    <x>726</x><y>1124</y><width>52</width><height>20</height>
+    <text>Slope:</text>
+    <transparent>true</transparent>
+    <border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>CALS Entry</name>
+    <x>781</x><y>1122</y><width>75</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_CALS</pv_name>
+    <format_type>1</format_type>
+    <precision>6</precision>
+    <border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>CALS unit</name>
+    <x>860</x><y>1124</y><width>40</width><height>20</height>
+    <text>eV/ch</text>
+    <transparent>true</transparent>
+    <border_style>0</border_style>
+  </widget>
+
+  <!-- ===== MCA NOTE (x=720 y=1165 w=370 h=58) ===== -->
+  <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0.0">
+    <name>MCA Note Rect</name>
+    <x>720</x><y>1165</y><width>370</width><height>58</height>
+    <bg_color><color red="255" green="244" blue="204"/></bg_color>
+    <foreground_color><color red="160" green="120" blue="0"/></foreground_color>
+    <line_width>1</line_width>
+    <fill>true</fill>
+    <border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>MCA Note1</name>
+    <x>726</x><y>1169</y><width>360</width><height>18</height>
+    <text>ROI counts are Passive — click a row Rd button</text>
+    <transparent>true</transparent>
+    <border_style>0</border_style>
+    <font><fontdata fontName="Liberation Sans" height="10" style="2"/></font>
+    <foreground_color><color red="120" green="80" blue="0"/></foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>MCA Note2</name>
+    <x>726</x><y>1190</y><width>360</width><height>18</height>
+    <text>or Read All ROI Counts to refresh all at once.</text>
+    <transparent>true</transparent>
+    <border_style>0</border_style>
+    <font><fontdata fontName="Liberation Sans" height="10" style="2"/></font>
+    <foreground_color><color red="120" green="80" blue="0"/></foreground_color>
+  </widget>
+
+  <!-- ===== MCA ROI TABLE (x=10 y=1262 w=1080 h=166) ===== -->
+  <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0.0">
+    <name>ROI Table Rect</name>
+    <x>10</x><y>1262</y><width>1080</width><height>166</height>
+    <bg_color><color red="250" green="240" blue="255"/></bg_color>
+    <foreground_color><color red="120" green="80" blue="180"/></foreground_color>
+    <line_width>2</line_width>
+    <fill>true</fill>
+    <border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>ROI Table Title</name>
+    <x>16</x><y>1265</y><width>380</width><height>20</height>
+    <text>MCA ROIs  (0-indexed channel numbers)</text>
+    <transparent>true</transparent>
+    <border_style>0</border_style>
+    <font><fontdata fontName="Liberation Sans" height="11" style="1"/></font>
+    <foreground_color><color red="60" green="0" blue="100"/></foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="1.0.0">
+    <name>Read All ROIs</name>
+    <x>876</x><y>1261</y><width>204</width><height>24</height>
+    <text>Read All ROI Counts</text>
+    <bg_color><color red="80" green="40" blue="140"/></bg_color>
+    <foreground_color><color red="255" green="255" blue="255"/></foreground_color>
+    <border_style>0</border_style>
+    <actions hook="false" hook_all="true">
+      <action type="WRITE_PV"><pv_name>15ID:UVVis:MCA1_R0.PROC</pv_name><value>1</value><timeout>5</timeout><confirm_message/><description>R0</description></action>
+      <action type="WRITE_PV"><pv_name>15ID:UVVis:MCA1_R1.PROC</pv_name><value>1</value><timeout>5</timeout><confirm_message/><description>R1</description></action>
+      <action type="WRITE_PV"><pv_name>15ID:UVVis:MCA1_R2.PROC</pv_name><value>1</value><timeout>5</timeout><confirm_message/><description>R2</description></action>
+      <action type="WRITE_PV"><pv_name>15ID:UVVis:MCA1_R3.PROC</pv_name><value>1</value><timeout>5</timeout><confirm_message/><description>R3</description></action>
+      <action type="WRITE_PV"><pv_name>15ID:UVVis:MCA1_R4.PROC</pv_name><value>1</value><timeout>5</timeout><confirm_message/><description>R4</description></action>
+      <action type="WRITE_PV"><pv_name>15ID:UVVis:MCA1_R5.PROC</pv_name><value>1</value><timeout>5</timeout><confirm_message/><description>R5</description></action>
+      <action type="WRITE_PV"><pv_name>15ID:UVVis:MCA1_R6.PROC</pv_name><value>1</value><timeout>5</timeout><confirm_message/><description>R6</description></action>
+      <action type="WRITE_PV"><pv_name>15ID:UVVis:MCA1_R7.PROC</pv_name><value>1</value><timeout>5</timeout><confirm_message/><description>R7</description></action>
+    </actions>
+  </widget>
+
+  <!-- Header row y=1285 -->
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>H ROI L</name><x>16</x><y>1286</y><width>30</width><height>18</height>
+    <text>ROI</text><transparent>true</transparent><border_style>0</border_style>
+    <font><fontdata fontName="Liberation Sans" height="10" style="1"/></font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>H Name L</name><x>47</x><y>1286</y><width>85</width><height>18</height>
+    <text>Name</text><transparent>true</transparent><border_style>0</border_style>
+    <font><fontdata fontName="Liberation Sans" height="10" style="1"/></font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>H Lo L</name><x>162</x><y>1286</y><width>50</width><height>18</height>
+    <text>Lo Ch</text><transparent>true</transparent><border_style>0</border_style>
+    <font><fontdata fontName="Liberation Sans" height="10" style="1"/></font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>H Hi L</name><x>242</x><y>1286</y><width>50</width><height>18</height>
+    <text>Hi Ch</text><transparent>true</transparent><border_style>0</border_style>
+    <font><fontdata fontName="Liberation Sans" height="10" style="1"/></font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>H Cts L</name><x>298</x><y>1286</y><width>65</width><height>18</height>
+    <text>Counts</text><transparent>true</transparent><border_style>0</border_style>
+    <font><fontdata fontName="Liberation Sans" height="10" style="1"/></font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>H ROI R</name><x>556</x><y>1286</y><width>30</width><height>18</height>
+    <text>ROI</text><transparent>true</transparent><border_style>0</border_style>
+    <font><fontdata fontName="Liberation Sans" height="10" style="1"/></font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>H Name R</name><x>587</x><y>1286</y><width>85</width><height>18</height>
+    <text>Name</text><transparent>true</transparent><border_style>0</border_style>
+    <font><fontdata fontName="Liberation Sans" height="10" style="1"/></font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>H Lo R</name><x>702</x><y>1286</y><width>50</width><height>18</height>
+    <text>Lo Ch</text><transparent>true</transparent><border_style>0</border_style>
+    <font><fontdata fontName="Liberation Sans" height="10" style="1"/></font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>H Hi R</name><x>782</x><y>1286</y><width>50</width><height>18</height>
+    <text>Hi Ch</text><transparent>true</transparent><border_style>0</border_style>
+    <font><fontdata fontName="Liberation Sans" height="10" style="1"/></font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>H Cts R</name><x>838</x><y>1286</y><width>65</width><height>18</height>
+    <text>Counts</text><transparent>true</transparent><border_style>0</border_style>
+    <font><fontdata fontName="Liberation Sans" height="10" style="1"/></font>
+  </widget>
+
+  <!-- ROI 0 left y=1308 -->
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>R0 Lbl</name><x>16</x><y>1311</y><width>28</width><height>20</height>
+    <text>R0:</text><transparent>true</transparent><border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R0 Name</name><x>47</x><y>1308</y><width>85</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R0NM</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R0 Lo</name><x>162</x><y>1308</y><width>50</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R0LO</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R0 Hi</name><x>242</x><y>1308</y><width>50</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R0HI</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+    <name>R0 Cts</name><x>296</x><y>1308</y><width>78</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R0</pv_name><precision>0</precision><border_style>1</border_style>
+    <foreground_color><color red="0" green="0" blue="150"/></foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="1.0.0">
+    <name>R0 Rd</name><x>378</x><y>1310</y><width>30</width><height>20</height>
+    <text>Rd</text><border_style>0</border_style>
+    <actions hook="false" hook_all="false">
+      <action type="WRITE_PV"><pv_name>15ID:UVVis:MCA1_R0.PROC</pv_name><value>1</value><timeout>5</timeout><confirm_message/><description>Read R0</description></action>
+    </actions>
+  </widget>
+
+  <!-- ROI 1 left y=1334 -->
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>R1 Lbl</name><x>16</x><y>1337</y><width>28</width><height>20</height>
+    <text>R1:</text><transparent>true</transparent><border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R1 Name</name><x>47</x><y>1334</y><width>85</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R1NM</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R1 Lo</name><x>162</x><y>1334</y><width>50</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R1LO</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R1 Hi</name><x>242</x><y>1334</y><width>50</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R1HI</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+    <name>R1 Cts</name><x>296</x><y>1334</y><width>78</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R1</pv_name><precision>0</precision><border_style>1</border_style>
+    <foreground_color><color red="0" green="0" blue="150"/></foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="1.0.0">
+    <name>R1 Rd</name><x>378</x><y>1336</y><width>30</width><height>20</height>
+    <text>Rd</text><border_style>0</border_style>
+    <actions hook="false" hook_all="false">
+      <action type="WRITE_PV"><pv_name>15ID:UVVis:MCA1_R1.PROC</pv_name><value>1</value><timeout>5</timeout><confirm_message/><description>Read R1</description></action>
+    </actions>
+  </widget>
+
+  <!-- ROI 2 left y=1360 -->
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>R2 Lbl</name><x>16</x><y>1363</y><width>28</width><height>20</height>
+    <text>R2:</text><transparent>true</transparent><border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R2 Name</name><x>47</x><y>1360</y><width>85</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R2NM</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R2 Lo</name><x>162</x><y>1360</y><width>50</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R2LO</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R2 Hi</name><x>242</x><y>1360</y><width>50</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R2HI</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+    <name>R2 Cts</name><x>296</x><y>1360</y><width>78</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R2</pv_name><precision>0</precision><border_style>1</border_style>
+    <foreground_color><color red="0" green="0" blue="150"/></foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="1.0.0">
+    <name>R2 Rd</name><x>378</x><y>1362</y><width>30</width><height>20</height>
+    <text>Rd</text><border_style>0</border_style>
+    <actions hook="false" hook_all="false">
+      <action type="WRITE_PV"><pv_name>15ID:UVVis:MCA1_R2.PROC</pv_name><value>1</value><timeout>5</timeout><confirm_message/><description>Read R2</description></action>
+    </actions>
+  </widget>
+
+  <!-- ROI 3 left y=1386 -->
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>R3 Lbl</name><x>16</x><y>1389</y><width>28</width><height>20</height>
+    <text>R3:</text><transparent>true</transparent><border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R3 Name</name><x>47</x><y>1386</y><width>85</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R3NM</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R3 Lo</name><x>162</x><y>1386</y><width>50</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R3LO</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R3 Hi</name><x>242</x><y>1386</y><width>50</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R3HI</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+    <name>R3 Cts</name><x>296</x><y>1386</y><width>78</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R3</pv_name><precision>0</precision><border_style>1</border_style>
+    <foreground_color><color red="0" green="0" blue="150"/></foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="1.0.0">
+    <name>R3 Rd</name><x>378</x><y>1388</y><width>30</width><height>20</height>
+    <text>Rd</text><border_style>0</border_style>
+    <actions hook="false" hook_all="false">
+      <action type="WRITE_PV"><pv_name>15ID:UVVis:MCA1_R3.PROC</pv_name><value>1</value><timeout>5</timeout><confirm_message/><description>Read R3</description></action>
+    </actions>
+  </widget>
+
+  <!-- ROI 4 right y=1308 -->
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>R4 Lbl</name><x>556</x><y>1311</y><width>28</width><height>20</height>
+    <text>R4:</text><transparent>true</transparent><border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R4 Name</name><x>587</x><y>1308</y><width>85</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R4NM</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R4 Lo</name><x>702</x><y>1308</y><width>50</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R4LO</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R4 Hi</name><x>782</x><y>1308</y><width>50</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R4HI</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+    <name>R4 Cts</name><x>836</x><y>1308</y><width>78</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R4</pv_name><precision>0</precision><border_style>1</border_style>
+    <foreground_color><color red="0" green="0" blue="150"/></foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="1.0.0">
+    <name>R4 Rd</name><x>918</x><y>1310</y><width>30</width><height>20</height>
+    <text>Rd</text><border_style>0</border_style>
+    <actions hook="false" hook_all="false">
+      <action type="WRITE_PV"><pv_name>15ID:UVVis:MCA1_R4.PROC</pv_name><value>1</value><timeout>5</timeout><confirm_message/><description>Read R4</description></action>
+    </actions>
+  </widget>
+
+  <!-- ROI 5 right y=1334 -->
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>R5 Lbl</name><x>556</x><y>1337</y><width>28</width><height>20</height>
+    <text>R5:</text><transparent>true</transparent><border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R5 Name</name><x>587</x><y>1334</y><width>85</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R5NM</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R5 Lo</name><x>702</x><y>1334</y><width>50</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R5LO</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R5 Hi</name><x>782</x><y>1334</y><width>50</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R5HI</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+    <name>R5 Cts</name><x>836</x><y>1334</y><width>78</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R5</pv_name><precision>0</precision><border_style>1</border_style>
+    <foreground_color><color red="0" green="0" blue="150"/></foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="1.0.0">
+    <name>R5 Rd</name><x>918</x><y>1336</y><width>30</width><height>20</height>
+    <text>Rd</text><border_style>0</border_style>
+    <actions hook="false" hook_all="false">
+      <action type="WRITE_PV"><pv_name>15ID:UVVis:MCA1_R5.PROC</pv_name><value>1</value><timeout>5</timeout><confirm_message/><description>Read R5</description></action>
+    </actions>
+  </widget>
+
+  <!-- ROI 6 right y=1360 -->
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>R6 Lbl</name><x>556</x><y>1363</y><width>28</width><height>20</height>
+    <text>R6:</text><transparent>true</transparent><border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R6 Name</name><x>587</x><y>1360</y><width>85</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R6NM</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R6 Lo</name><x>702</x><y>1360</y><width>50</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R6LO</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R6 Hi</name><x>782</x><y>1360</y><width>50</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R6HI</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+    <name>R6 Cts</name><x>836</x><y>1360</y><width>78</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R6</pv_name><precision>0</precision><border_style>1</border_style>
+    <foreground_color><color red="0" green="0" blue="150"/></foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="1.0.0">
+    <name>R6 Rd</name><x>918</x><y>1362</y><width>30</width><height>20</height>
+    <text>Rd</text><border_style>0</border_style>
+    <actions hook="false" hook_all="false">
+      <action type="WRITE_PV"><pv_name>15ID:UVVis:MCA1_R6.PROC</pv_name><value>1</value><timeout>5</timeout><confirm_message/><description>Read R6</description></action>
+    </actions>
+  </widget>
+
+  <!-- ROI 7 right y=1386 -->
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>R7 Lbl</name><x>556</x><y>1389</y><width>28</width><height>20</height>
+    <text>R7:</text><transparent>true</transparent><border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R7 Name</name><x>587</x><y>1386</y><width>85</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R7NM</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R7 Lo</name><x>702</x><y>1386</y><width>50</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R7LO</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>R7 Hi</name><x>782</x><y>1386</y><width>50</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R7HI</pv_name><border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+    <name>R7 Cts</name><x>836</x><y>1386</y><width>78</width><height>24</height>
+    <pv_name>15ID:UVVis:MCA1_R7</pv_name><precision>0</precision><border_style>1</border_style>
+    <foreground_color><color red="0" green="0" blue="150"/></foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="1.0.0">
+    <name>R7 Rd</name><x>918</x><y>1388</y><width>30</width><height>20</height>
+    <text>Rd</text><border_style>0</border_style>
+    <actions hook="false" hook_all="false">
+      <action type="WRITE_PV"><pv_name>15ID:UVVis:MCA1_R7.PROC</pv_name><value>1</value><timeout>5</timeout><confirm_message/><description>Read R7</description></action>
+    </actions>
   </widget>
 
 </display>
