@@ -141,7 +141,15 @@ record(waveform, "$(P):$(D):Spectrum")
     field(SCAN, "Passive")
     field(NELM, "1044")
     field(FTVL, "DOUBLE")
-    field(FLNK, "$(P):$(D):UVVis.PROC")
+    field(FLNK, "$(P):$(D):Spectrum_FAN")
+}
+
+record(fanout, "$(P):$(D):Spectrum_FAN")
+{
+    field(DESC, "Spectrum post-process fanout")
+    field(SCAN, "Passive")
+    field(LNK1, "$(P):$(D):UVVis.PROC PP")
+    field(LNK2, "$(P):$(D):MCA1 PP")
 }
 
 

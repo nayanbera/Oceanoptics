@@ -266,18 +266,35 @@ def get_uv_vis_abs():
     return list(uv_abs)
 
 
+_spectrum_fresh = False  # set by get_spectrum(); consumed by get_current_spectrum()
+
+
 def get_spectrum():
-    global spectrum, message
+    global spectrum, message, _spectrum_fresh
     message = "Collecting Spectrum..."
     spectrum = odev.get_formatted_spectrum()
     message = "New spectrum collected"
-    _update_mca(spectrum)
+    _spectrum_fresh = True  # signal to get_current_spectrum() that cache is valid
     _hdf1_capture_frame(spectrum)
     return spectrum
 
+
 def get_current_spectrum():
-    """Return cached spectrum without hardware acquisition or CA loopback.
-    Used as MCA1.INP so MCA1.PROC never re-triggers get_spectrum()."""
+    """MCA1.INP target.
+
+    If called from the Spectrum FLNK chain (i.e. immediately after
+    get_spectrum() ran), _spectrum_fresh is True and we return the cached
+    global without a second hardware call.  If called via a direct MCA1.PROC
+    (the "Acquire MCA Now" button with the old OPI, or any standalone
+    caput), we do a real hardware acquisition so the MCA is up-to-date.
+    """
+    global spectrum, message, _spectrum_fresh
+    if _spectrum_fresh:
+        _spectrum_fresh = False
+        return spectrum
+    message = "Collecting Spectrum..."
+    spectrum = odev.get_formatted_spectrum()
+    message = "New spectrum collected"
     return spectrum
 
 def get_and_save_spectrum():
