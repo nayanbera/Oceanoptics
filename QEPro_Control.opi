@@ -1241,8 +1241,8 @@
     <border_style>0</border_style>
     <actions hook="false" hook_all="true">
       <action type="WRITE_PV">
-        <pv_name>15ID:UVVis:MCA1.PROC</pv_name>
-        <value>1</value><timeout>10</timeout><confirm_message/><description>Acquire MCA spectrum</description>
+        <pv_name>15ID:UVVis:Spectrum.PROC</pv_name>
+        <value>1</value><timeout>10</timeout><confirm_message/><description>Acquire spectrum then update MCA via CA loopback</description>
       </action>
       <action type="WRITE_PV">
         <pv_name>15ID:UVVis:MCA1_ERTM.PROC</pv_name>

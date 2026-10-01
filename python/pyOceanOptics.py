@@ -275,6 +275,11 @@ def get_spectrum():
     _hdf1_capture_frame(spectrum)
     return spectrum
 
+def get_current_spectrum():
+    """Return cached spectrum without hardware acquisition or CA loopback.
+    Used as MCA1.INP so MCA1.PROC never re-triggers get_spectrum()."""
+    return spectrum
+
 def get_and_save_spectrum():
     get_spectrum()
     save_spectrum()

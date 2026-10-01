@@ -12,7 +12,7 @@ record(waveform, "$(P):$(D):MCA1")
 {
     field(DESC, "MCA spectrum")
     field(DTYP, "pydev")
-    field(INP,  "@get_spectrum()")
+    field(INP,  "@get_current_spectrum()")
     field(SCAN, "Passive")
     field(NELM, "$(NPIX=1044)")
     field(FTVL, "DOUBLE")
