@@ -1,0 +1,70 @@
+# autosave request file for the QEPro UV-Vis IOC.
+# Macros: P=15ID, D=UVVis  (expands to "15ID:UVVis:...")
+# Saved every 30 s and restored at pass0 + pass1 on IOC restart.
+
+# ── Acquisition parameters ───────────────────────────────────────────
+$(P):$(D):setIntegrationTime
+$(P):$(D):setScanNum
+$(P):$(D):setBoxcarWidth
+$(P):$(D):setNonlinCorrect
+
+# ── Data file settings ───────────────────────────────────────────────
+$(P):$(D):setDataDir
+$(P):$(D):setFileName
+
+# ── Waveform ROI ─────────────────────────────────────────────────────
+$(P):$(D):ROIStart
+$(P):$(D):ROIStop
+
+# ── MCA calibration ──────────────────────────────────────────────────
+$(P):$(D):MCA1_CALO
+$(P):$(D):MCA1_CALS
+
+# ── MCA ROI limits and labels ────────────────────────────────────────
+$(P):$(D):MCA1_R0LO
+$(P):$(D):MCA1_R0HI
+$(P):$(D):MCA1_R0NM
+$(P):$(D):MCA1_R1LO
+$(P):$(D):MCA1_R1HI
+$(P):$(D):MCA1_R1NM
+$(P):$(D):MCA1_R2LO
+$(P):$(D):MCA1_R2HI
+$(P):$(D):MCA1_R2NM
+$(P):$(D):MCA1_R3LO
+$(P):$(D):MCA1_R3HI
+$(P):$(D):MCA1_R3NM
+$(P):$(D):MCA1_R4LO
+$(P):$(D):MCA1_R4HI
+$(P):$(D):MCA1_R4NM
+$(P):$(D):MCA1_R5LO
+$(P):$(D):MCA1_R5HI
+$(P):$(D):MCA1_R5NM
+$(P):$(D):MCA1_R6LO
+$(P):$(D):MCA1_R6HI
+$(P):$(D):MCA1_R6NM
+$(P):$(D):MCA1_R7LO
+$(P):$(D):MCA1_R7HI
+$(P):$(D):MCA1_R7NM
+
+# ── TEC temperature controller ───────────────────────────────────────
+$(P):$(D):TEC:TempSP
+$(P):$(D):TEC:Enable
+
+# ── HDF5 file plugin ─────────────────────────────────────────────────
+$(P):$(D):HDF1:FilePath
+$(P):$(D):HDF1:FileName
+$(P):$(D):HDF1:FileTemplate
+$(P):$(D):HDF1:XMLFileName
+$(P):$(D):HDF1:FileNumber
+$(P):$(D):HDF1:NumCapture
+$(P):$(D):HDF1:AutoIncrement
+$(P):$(D):HDF1:AutoSave
+$(P):$(D):HDF1:FileWriteMode
+$(P):$(D):HDF1:Attr:BeamEnergy
+$(P):$(D):HDF1:Attr:SampleName
+$(P):$(D):HDF1:Attr:SampleDescription
+$(P):$(D):HDF1:Attr:ExposureMode
+
+# ── Dark and reference spectra (no need to re-acquire after restart) ─
+$(P):$(D):DarkSpectrum
+$(P):$(D):ReferenceSpectrum

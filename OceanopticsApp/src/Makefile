@@ -62,6 +62,7 @@ Oceanoptics_DBD += OceanopticsHello.dbd
 Oceanoptics_DBD += initTrace.dbd
 Oceanoptics_DBD += mca.dbd
 Oceanoptics_DBD += pydev.dbd
+Oceanoptics_DBD += asSupport.dbd
 
 # Oceanoptics_registerRecordDeviceDriver.cpp derives from Oceanoptics.dbd
 Oceanoptics_SRCS += Oceanoptics_registerRecordDeviceDriver.cpp
@@ -74,6 +75,7 @@ Oceanoptics_SRCS_vxWorks += -nil-
 Oceanoptics_LIBS += OceanopticsSupport
 Oceanoptics_LIBS += mca
 Oceanoptics_LIBS += asyn
+Oceanoptics_LIBS += autosave
 Oceanoptics_LIBS += pydev
 
 # To build SNL programs, SNCSEQ must be defined

@@ -35,9 +35,10 @@
 # EPICS_BASE should appear last so earlier modules can override stuff:
 SUPPORT = /home/chem_epics/synApps_6_3/support
 
-ASYN    = $(SUPPORT)/asyn-R4-44-2
-MCA     = $(SUPPORT)/mca-R7-10
+ASYN     = $(SUPPORT)/asyn-R4-44-2
+MCA      = $(SUPPORT)/mca-R7-10
 PYDEVICE = $(SUPPORT)/PyDevice
+AUTOSAVE = $(SUPPORT)/autosave-R5-11-2
 
 EPICS_BASE = /usr/local/epics/base
 

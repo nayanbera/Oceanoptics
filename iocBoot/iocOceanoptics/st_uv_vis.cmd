@@ -26,6 +26,16 @@ Oceanoptics_registerRecordDeviceDriver pdbbase
 ## Uncomment these two lines once drvSoftMca is available in your mca build:
 #drvSoftMcaConfigure("QEPRO_MCA", 1044)
 
+## autosave / save_restore -- preserve PV values across IOC restarts
+epicsEnvSet("SAVE_DIR","$(TOP)/autosave")
+system("mkdir -p $(TOP)/autosave")
+set_savefile_path("$(TOP)/autosave")
+set_requestfile_path("$(TOP)/OceanopticsApp/Db")
+save_restoreSet_NumSeqFiles(3)
+save_restoreSet_SeqPeriodInSeconds(600)
+set_pass0_restoreFile("auto_settings.sav")
+set_pass1_restoreFile("auto_settings.sav")
+
 ## Load record instances
 #dbLoadTemplate "db/user.substitutions"
 dbLoadRecords "db/OceanopticsVersion.db", "user=chem_epics"
@@ -56,6 +66,9 @@ pydev("ioc_prefix = '15ID:UVVis:'")
 pydev("hdf_set_xml_filename('iocBoot/iocOceanoptics/hdf5_layout.xml')")
 
 iocInit
+
+## Start autosave periodic saves (every 30 s, macro P=15ID D=UVVis)
+create_monitor_set("auto_settings.req", 30, "P=15ID,D=UVVis")
 
 ## Start any sequence programs
 #seq sncExample, "user=chem_epics"
