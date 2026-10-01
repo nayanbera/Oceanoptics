@@ -1049,31 +1049,74 @@
     <border_style>1</border_style>
     <foreground_color><color red="180" green="0" blue="0"/></foreground_color>
   </widget>
-  <!-- Row 8: Path RBV + Name RBV y=736 -->
+  <!-- Row 8: NDAttributes XML y=736 -->
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>NDAttrXML Lbl</name>
+    <x>16</x><y>738</y><width>68</width><height>20</height>
+    <text>NDAttr XML:</text>
+    <transparent>true</transparent>
+    <border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0.0">
+    <name>NDAttrXML Entry</name>
+    <x>87</x><y>736</y><width>400</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:AttrXMLFileName</pv_name>
+    <border_style>1</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.LED" version="1.0.0">
+    <name>NDAttrXMLValid LED</name>
+    <x>493</x><y>739</y><width>18</width><height>18</height>
+    <pv_name>15ID:UVVis:HDF1:AttrXMLValid_RBV</pv_name>
+    <on_color><color red="0" green="200" blue="0"/></on_color>
+    <off_color><color red="200" green="0" blue="0"/></off_color>
+    <border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>NDAttrXMLValid Lbl</name>
+    <x>515</x><y>738</y><width>40</width><height>20</height>
+    <text>Valid</text>
+    <transparent>true</transparent>
+    <border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <name>NDAttrXMLErr Lbl</name>
+    <x>561</x><y>738</y><width>62</width><height>20</height>
+    <text>Attr Error:</text>
+    <transparent>true</transparent>
+    <border_style>0</border_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+    <name>NDAttrXMLErr RBV</name>
+    <x>626</x><y>736</y><width>454</width><height>24</height>
+    <pv_name>15ID:UVVis:HDF1:AttrXMLErrorMsg_RBV</pv_name>
+    <border_style>1</border_style>
+    <foreground_color><color red="180" green="0" blue="0"/></foreground_color>
+  </widget>
+  <!-- Row 9: Path RBV + Name RBV y=765 -->
   <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
     <name>FilePath RBV Lbl</name>
-    <x>16</x><y>738</y><width>68</width><height>20</height>
+    <x>16</x><y>767</y><width>68</width><height>20</height>
     <text>Path RBV:</text>
     <transparent>true</transparent>
     <border_style>0</border_style>
   </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
     <name>FilePath RBV</name>
-    <x>87</x><y>736</y><width>460</width><height>24</height>
+    <x>87</x><y>765</y><width>460</width><height>24</height>
     <pv_name>15ID:UVVis:HDF1:FilePath_RBV</pv_name>
     <border_style>1</border_style>
     <foreground_color><color red="0" green="0" blue="150"/></foreground_color>
   </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
     <name>FileName RBV Lbl</name>
-    <x>558</x><y>738</y><width>68</width><height>20</height>
+    <x>558</x><y>767</y><width>68</width><height>20</height>
     <text>Name RBV:</text>
     <transparent>true</transparent>
     <border_style>0</border_style>
   </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
     <name>FileName RBV</name>
-    <x>629</x><y>736</y><width>200</width><height>24</height>
+    <x>629</x><y>765</y><width>200</width><height>24</height>
     <pv_name>15ID:UVVis:HDF1:FileName_RBV</pv_name>
     <border_style>1</border_style>
     <foreground_color><color red="0" green="0" blue="150"/></foreground_color>
