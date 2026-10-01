@@ -16,6 +16,36 @@ record(waveform, "$(P):$(D):MCA1")
     field(SCAN, "Passive")
     field(NELM, "$(NPIX=1044)")
     field(FTVL, "DOUBLE")
+    field(FLNK, "$(P):$(D):MCA1_FAN")
+}
+
+# ------------------------------------------------------------------
+# Fanout — fires automatically after every CA put to MCA1
+# MCA1_FAN  → ERTM, ACQG, ELTM, R0, R1 → MCA1_FAN2
+# MCA1_FAN2 → R2 .. R7
+# ------------------------------------------------------------------
+record(fanout, "$(P):$(D):MCA1_FAN")
+{
+    field(DESC, "MCA status+ROI fanout")
+    field(SCAN, "Passive")
+    field(LNK1, "$(P):$(D):MCA1_ERTM PP")
+    field(LNK2, "$(P):$(D):MCA1_ACQG PP")
+    field(LNK3, "$(P):$(D):MCA1_ELTM PP")
+    field(LNK4, "$(P):$(D):MCA1_R0 PP")
+    field(LNK5, "$(P):$(D):MCA1_R1 PP")
+    field(LNK6, "$(P):$(D):MCA1_FAN2 PP")
+}
+
+record(fanout, "$(P):$(D):MCA1_FAN2")
+{
+    field(DESC, "MCA ROI fanout 2")
+    field(SCAN, "Passive")
+    field(LNK1, "$(P):$(D):MCA1_R2 PP")
+    field(LNK2, "$(P):$(D):MCA1_R3 PP")
+    field(LNK3, "$(P):$(D):MCA1_R4 PP")
+    field(LNK4, "$(P):$(D):MCA1_R5 PP")
+    field(LNK5, "$(P):$(D):MCA1_R6 PP")
+    field(LNK6, "$(P):$(D):MCA1_R7 PP")
 }
 
 # ------------------------------------------------------------------

@@ -1437,7 +1437,7 @@
   <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
     <name>MCA Note1</name>
     <x>726</x><y>1169</y><width>360</width><height>18</height>
-    <text>ROI counts are Passive — click a row Rd button</text>
+    <text>ROI counts update automatically after each acquisition.</text>
     <transparent>true</transparent>
     <border_style>0</border_style>
     <font><fontdata fontName="Liberation Sans" height="10" style="2"/></font>
@@ -1446,7 +1446,7 @@
   <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
     <name>MCA Note2</name>
     <x>726</x><y>1190</y><width>360</width><height>18</height>
-    <text>or Read All ROI Counts to refresh all at once.</text>
+    <text>Acquiring LED always shows Done (synchronous pydev).</text>
     <transparent>true</transparent>
     <border_style>0</border_style>
     <font><fontdata fontName="Liberation Sans" height="10" style="2"/></font>
