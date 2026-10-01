@@ -65,6 +65,9 @@ $(P):$(D):HDF1:Attr:SampleName
 $(P):$(D):HDF1:Attr:SampleDescription
 $(P):$(D):HDF1:Attr:ExposureMode
 
+# ── NDAttributes XML file ────────────────────────────────────────────
+$(P):$(D):HDF1:AttrXMLFileName
+
 # ── Dark and reference spectra (no need to re-acquire after restart) ─
 $(P):$(D):DarkSpectrum
 $(P):$(D):ReferenceSpectrum

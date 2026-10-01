@@ -1013,6 +1013,27 @@ def hdf_get_xml_valid():
 def hdf_get_xml_error():
     return hdf1.xml_error
 
+# --- NDAttributes XML (areaDetector-compatible; EPICS PVs + constants) ---
+
+def hdf_set_ndattr_xml_filename(val):
+    global message
+    val = str(val).strip().rstrip("\x00")
+    hdf1.load_ndattr_xml(val)
+    if val and not hdf1.ndattr_xml_valid:
+        message = f"NDAttr XML error: {hdf1.ndattr_xml_error}"
+    elif val:
+        n = len(hdf1._ndattr_defs)
+        message = f"NDAttr XML loaded: {n} attribute(s) from {os.path.basename(val)}"
+
+def hdf_get_ndattr_xml_filename():
+    return hdf1.ndattr_xml_filename
+
+def hdf_get_ndattr_xml_valid():
+    return int(hdf1.ndattr_xml_valid)
+
+def hdf_get_ndattr_xml_error():
+    return hdf1.ndattr_xml_error
+
 # --- NDAttribute setters (user metadata) ---
 
 def hdf_set_attr_sample_name(val):

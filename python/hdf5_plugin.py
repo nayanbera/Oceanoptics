@@ -12,8 +12,8 @@ Capture (1): Accumulate NumCapture spectra in memory; write them all to one
 Stream  (2): Open one file on Capture=1, append each spectrum as it arrives,
              close the file when Capture goes to 0.
 
-XML layout file
----------------
+XML layout file  (HDF1:XMLFileName)
+------------------------------------
 Defines the HDF5 structure. Supported element types:
 
   <group name="...">        HDF5 group; can nest groups and datasets.
@@ -33,13 +33,42 @@ Defines the HDF5 structure. Supported element types:
 source="detector" marks the dataset that receives the spectrum array.
 det_default="true" is an alias for source="detector".
 
+NDAttributes XML file  (HDF1:AttrXMLFileName)
+----------------------------------------------
+areaDetector-compatible XML that defines extra metadata attributes collected
+from EPICS PVs or literal constants and injected into every HDF5 frame.
+Format matches the areaDetector NDAttribute XML schema:
+
+  <Attributes>
+    <Attribute name="RingCurrent"
+               type="EPICS_PV"
+               source="S:SRcurrentAI.VAL"
+               dbrtype="DBR_DOUBLE"
+               description="Storage ring current (mA)" />
+    <Attribute name="Facility"
+               type="CONST"
+               source="Advanced Photon Source"
+               datatype="STRING"
+               description="Facility name" />
+  </Attributes>
+
+Supported types:
+  EPICS_PV  -- caget the PV at each capture; dbrtype controls the Python cast:
+               DBR_DOUBLE/DBR_FLOAT → float, DBR_LONG/DBR_SHORT/DBR_ENUM → int,
+               DBR_STRING/DBR_CHAR → str.
+  CONST     -- literal constant; datatype = STRING | INT | DOUBLE.
+
+Named attributes can then be referenced in the layout XML:
+  <dataset name="ring_current" source="ndattribute" ndattribute="RingCurrent" />
+
 NDAttributes dict
 -----------------
-Auto-populated on every capture with acquisition metadata:
-  Wavelengths, DarkSpectrum, ReferenceSpectrum, IntegrationTime,
-  ScansToAverage, BoxcarWidth, TECTemperature, Timestamp, FrameNumber.
+Priority (highest wins): auto hardware keys > NDAttributes XML > HDF1:Attr PVs.
 
-Extra keys can be set from EPICS PVs (HDF1:Attr:<name>) and are merged in.
+Auto keys populated on every capture:
+  Wavelengths, DarkSpectrum, ReferenceSpectrum, IntegrationTime,
+  ScansToAverage, BoxcarWidth, TECTemperature, Timestamp, FrameNumber,
+  SourceFilename.
 """
 
 import os
@@ -102,6 +131,12 @@ class HDF5Plugin:
         # each time.
         self.nd_attrs = {}
 
+        # --- NDAttributes XML (areaDetector-compatible) ---
+        self.ndattr_xml_filename = ""
+        self.ndattr_xml_valid    = False
+        self.ndattr_xml_error    = ""
+        self._ndattr_defs        = []   # list of parsed attribute definitions
+
         # --- stream-mode state ---
         self._stream_file = None
         self._stream_ds   = {}     # name -> h5py.Dataset (extendable)
@@ -156,6 +191,85 @@ class HDF5Plugin:
             self.xml_error = str(exc)
 
     # ------------------------------------------------------------------
+    # NDAttributes XML loader (areaDetector-compatible)
+    # ------------------------------------------------------------------
+
+    def load_ndattr_xml(self, xml_path):
+        """Parse an areaDetector-compatible NDAttributes XML file.
+
+        Populates self._ndattr_defs with attribute definitions that are
+        evaluated at capture time by _collect_ndattrs().
+        """
+        xml_path = str(xml_path).strip().rstrip("\x00")
+        self.ndattr_xml_filename = xml_path
+        if not xml_path:
+            self._ndattr_defs        = []
+            self.ndattr_xml_valid    = False
+            self.ndattr_xml_error    = ""
+            return
+        try:
+            tree = ET.parse(xml_path)
+            root = tree.getroot()
+            defs = []
+            for elem in root.findall("Attribute"):
+                name = elem.get("name", "").strip()
+                if not name:
+                    continue
+                defs.append({
+                    "name":        name,
+                    "type":        elem.get("type",        "CONST"),
+                    "source":      elem.get("source",      ""),
+                    "dbrtype":     elem.get("dbrtype",     "DBR_DOUBLE").upper(),
+                    "datatype":    elem.get("datatype",    "STRING").upper(),
+                    "description": elem.get("description", ""),
+                })
+            self._ndattr_defs     = defs
+            self.ndattr_xml_valid = True
+            self.ndattr_xml_error = ""
+        except Exception as exc:
+            self._ndattr_defs     = []
+            self.ndattr_xml_valid = False
+            self.ndattr_xml_error = str(exc)
+
+    def _collect_ndattrs(self):
+        """Evaluate all NDAttribute definitions and return a dict.
+
+        EPICS_PV attributes call epics.caget() with a 0.5 s timeout.
+        CONST attributes use the literal source value.
+        Failures are silently skipped so a disconnected PV never blocks
+        a spectrum acquisition.
+        """
+        result = {}
+        for defn in self._ndattr_defs:
+            name  = defn["name"]
+            atype = defn.get("type", "CONST")
+            src   = defn.get("source", "")
+            try:
+                if atype == "EPICS_PV":
+                    import epics
+                    raw = epics.caget(src, timeout=0.5)
+                    if raw is None:
+                        continue
+                    dbrtype = defn.get("dbrtype", "DBR_DOUBLE")
+                    if dbrtype in ("DBR_STRING", "DBR_CHAR"):
+                        result[name] = str(raw)
+                    elif dbrtype in ("DBR_LONG", "DBR_SHORT", "DBR_ENUM", "DBR_INT"):
+                        result[name] = int(raw)
+                    else:   # DBR_DOUBLE, DBR_FLOAT
+                        result[name] = float(raw)
+                else:   # CONST
+                    datatype = defn.get("datatype", "STRING")
+                    if datatype in ("INT", "LONG"):
+                        result[name] = int(src)
+                    elif datatype in ("DOUBLE", "FLOAT"):
+                        result[name] = float(src)
+                    else:
+                        result[name] = str(src)
+            except Exception:
+                pass
+        return result
+
+    # ------------------------------------------------------------------
     # NDAttribute snapshot
     # ------------------------------------------------------------------
 
@@ -163,6 +277,7 @@ class HDF5Plugin:
                     itime, nscans, boxcar, tec_temp, source_filename=""):
         """Merge auto keys over the user-set nd_attrs dict."""
         d = dict(self.nd_attrs)
+        d.update(self._collect_ndattrs())
         d.update({
             "Wavelengths":       _as_array(wavelengths),
             "DarkSpectrum":      _as_array(dark),

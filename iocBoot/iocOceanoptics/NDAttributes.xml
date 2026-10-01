@@ -1,0 +1,79 @@
+<?xml version="1.0" standalone="no" ?>
+<!--
+  NDAttributes XML for the QEPro UV-Vis IOC.
+
+  areaDetector-compatible format.  Loaded at IOC startup via the
+  HDF1:AttrXMLFileName PV (set in st_uv_vis.cmd).  Values are read
+  from EPICS PVs (type="EPICS_PV") or set as literal constants
+  (type="CONST") and injected into every captured HDF5 frame.
+
+  To reference an attribute in hdf5_layout.xml use:
+    <dataset name="ring_current" source="ndattribute" ndattribute="RingCurrent" />
+
+  Supported dbrtype values for EPICS_PV:
+    DBR_DOUBLE, DBR_FLOAT  → stored as float64
+    DBR_LONG, DBR_SHORT, DBR_ENUM, DBR_INT  → stored as int64
+    DBR_STRING, DBR_CHAR   → stored as string
+
+  Supported datatype values for CONST:
+    STRING, INT, DOUBLE
+-->
+
+<Attributes>
+
+    <!-- ── Beamline identity ──────────────────────────────────────── -->
+    <Attribute name="Facility"
+               type="CONST"
+               source="Advanced Photon Source"
+               datatype="STRING"
+               description="Facility name" />
+
+    <Attribute name="Beamline"
+               type="CONST"
+               source="15-ID"
+               datatype="STRING"
+               description="Beamline designation" />
+
+    <!-- ── Storage ring ───────────────────────────────────────────── -->
+    <!--
+    <Attribute name="RingCurrent"
+               type="EPICS_PV"
+               source="S:SRcurrentAI.VAL"
+               dbrtype="DBR_DOUBLE"
+               description="Storage ring current (mA)" />
+
+    <Attribute name="RingMode"
+               type="EPICS_PV"
+               source="S:DesiredMode"
+               dbrtype="DBR_STRING"
+               description="Storage ring fill mode" />
+    -->
+
+    <!-- ── Undulator / insertion device ──────────────────────────── -->
+    <!--
+    <Attribute name="UndulatorEnergy"
+               type="EPICS_PV"
+               source="ID15ds:Energy.VAL"
+               dbrtype="DBR_DOUBLE"
+               description="Undulator gap energy (keV)" />
+    -->
+
+    <!-- ── Monochromator ─────────────────────────────────────────── -->
+    <!--
+    <Attribute name="MonoEnergy"
+               type="EPICS_PV"
+               source="15IDA:BraggEAO.VAL"
+               dbrtype="DBR_DOUBLE"
+               description="Monochromator energy (keV)" />
+    -->
+
+    <!-- ── Sample environment ────────────────────────────────────── -->
+    <!--
+    <Attribute name="SampleTemperature"
+               type="EPICS_PV"
+               source="15IDD:SampleTemp.VAL"
+               dbrtype="DBR_DOUBLE"
+               description="Sample temperature (K)" />
+    -->
+
+</Attributes>

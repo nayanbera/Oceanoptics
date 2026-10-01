@@ -416,3 +416,51 @@ record(lsi, "$(P):$(D):HDF1:Attr:ExposureMode_RBV")
     field(INP,  "@hdf_get_attr_exposure_mode()")
     field(SCAN, "Passive")
 }
+# ------------------------------------------------------------------
+# NDAttributes XML file (areaDetector-compatible)
+# Points to an XML file that defines additional metadata attributes
+# collected from EPICS PVs or constants at each spectrum capture.
+# ------------------------------------------------------------------
+
+record(lso, "$(P):$(D):HDF1:AttrXMLFileName")
+{
+    field(DESC, "NDAttributes XML file path")
+    field(DTYP, "pydev")
+    field(SIZV, "512")
+    field(OUT,  "@hdf_set_ndattr_xml_filename(VAL)")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+    field(FLNK, "$(P):$(D):HDF1:AttrXMLValid_RBV")
+}
+
+record(bi, "$(P):$(D):HDF1:AttrXMLValid_RBV")
+{
+    field(DESC, "NDAttributes XML file valid")
+    field(DTYP, "pydev")
+    field(INP,  "@hdf_get_ndattr_xml_valid()")
+    field(SCAN, "Passive")
+    field(ZNAM, "Invalid")
+    field(ONAM, "Valid")
+    field(ZSV,  "MINOR")
+    field(OSV,  "NO_ALARM")
+    field(FLNK, "$(P):$(D):HDF1:AttrXMLErrorMsg_RBV")
+}
+
+record(lsi, "$(P):$(D):HDF1:AttrXMLErrorMsg_RBV")
+{
+    field(DESC, "NDAttributes XML parse error")
+    field(DTYP, "pydev")
+    field(SIZV, "512")
+    field(INP,  "@hdf_get_ndattr_xml_error()")
+    field(SCAN, "Passive")
+}
+
+record(lsi, "$(P):$(D):HDF1:AttrXMLFileName_RBV")
+{
+    field(DESC, "NDAttributes XML file path readback")
+    field(DTYP, "pydev")
+    field(SIZV, "512")
+    field(INP,  "@hdf_get_ndattr_xml_filename()")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+}

@@ -64,6 +64,7 @@ pydev("ioc_prefix = '15ID:UVVis:'")
 # Load the default NeXus XML layout from the iocBoot directory.
 # Working directory is ${TOP} at this point.
 pydev("hdf_set_xml_filename('iocBoot/iocOceanoptics/hdf5_layout.xml')")
+pydev("hdf_set_ndattr_xml_filename('iocBoot/iocOceanoptics/NDAttributes.xml')")
 
 iocInit
 
