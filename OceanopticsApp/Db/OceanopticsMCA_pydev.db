@@ -1,17 +1,16 @@
 # MCA-compatible records backed by pydev — no drvSoftMca required.
-# Prefix convention: $(P):$(D):MCA1  (e.g. 15ID:UVVis:MCA1)
-# Provides the same PV interface as a real mca record so the MCA viewer
-# in easy-bluesky works without any changes.
+# Record names use underscores; alias() maps the dotted names that CA
+# clients expect (e.g. MCA1.ERTM -> MCA1_ERTM).
 #
 # Load with:
 #   dbLoadRecords "db/OceanopticsMCA_pydev.db", "P=15ID,D=UVVis,NROI=8,NPIX=1044"
 
 # ------------------------------------------------------------------
-# Spectrum waveform (alias of the main Spectrum record, same data)
+# Spectrum waveform  (MCA1.VAL)
 # ------------------------------------------------------------------
 record(waveform, "$(P):$(D):MCA1")
 {
-    field(DESC, "MCA spectrum (alias)")
+    field(DESC, "MCA spectrum")
     field(DTYP, "pydev")
     field(INP,  "@get_spectrum()")
     field(SCAN, "Passive")
@@ -20,9 +19,9 @@ record(waveform, "$(P):$(D):MCA1")
 }
 
 # ------------------------------------------------------------------
-# Status: elapsed real/live time and acquiring flag
+# Status records  (MCA1.ERTM / .ELTM / .ACQG)
 # ------------------------------------------------------------------
-record(ai, "$(P):$(D):MCA1.ERTM")
+record(ai, "$(P):$(D):MCA1_ERTM")
 {
     field(DESC, "Elapsed real time")
     field(DTYP, "pydev")
@@ -31,8 +30,9 @@ record(ai, "$(P):$(D):MCA1.ERTM")
     field(EGU,  "s")
     field(PREC, "3")
 }
+alias("$(P):$(D):MCA1_ERTM", "$(P):$(D):MCA1.ERTM")
 
-record(ai, "$(P):$(D):MCA1.ELTM")
+record(ai, "$(P):$(D):MCA1_ELTM")
 {
     field(DESC, "Elapsed live time")
     field(DTYP, "pydev")
@@ -41,8 +41,9 @@ record(ai, "$(P):$(D):MCA1.ELTM")
     field(EGU,  "s")
     field(PREC, "3")
 }
+alias("$(P):$(D):MCA1_ELTM", "$(P):$(D):MCA1.ELTM")
 
-record(bi, "$(P):$(D):MCA1.ACQG")
+record(bi, "$(P):$(D):MCA1_ACQG")
 {
     field(DESC, "Acquiring")
     field(DTYP, "pydev")
@@ -51,11 +52,12 @@ record(bi, "$(P):$(D):MCA1.ACQG")
     field(ZNAM, "Done")
     field(ONAM, "Acquiring")
 }
+alias("$(P):$(D):MCA1_ACQG", "$(P):$(D):MCA1.ACQG")
 
 # ------------------------------------------------------------------
-# Energy calibration: E(ch) = CALO + CALS * ch
+# Energy calibration  (MCA1.CALO / .CALS)
 # ------------------------------------------------------------------
-record(ao, "$(P):$(D):MCA1.CALO")
+record(ao, "$(P):$(D):MCA1_CALO")
 {
     field(DESC, "Energy cal offset (eV at ch 0)")
     field(DTYP, "pydev")
@@ -65,8 +67,9 @@ record(ao, "$(P):$(D):MCA1.CALO")
     field(EGU,  "eV")
     field(PREC, "4")
 }
+alias("$(P):$(D):MCA1_CALO", "$(P):$(D):MCA1.CALO")
 
-record(ao, "$(P):$(D):MCA1.CALS")
+record(ao, "$(P):$(D):MCA1_CALS")
 {
     field(DESC, "Energy cal slope (eV/ch)")
     field(DTYP, "pydev")
@@ -76,259 +79,316 @@ record(ao, "$(P):$(D):MCA1.CALS")
     field(EGU,  "eV/ch")
     field(PREC, "6")
 }
+alias("$(P):$(D):MCA1_CALS", "$(P):$(D):MCA1.CALS")
 
 # ------------------------------------------------------------------
-# ROI 0
+# ROI 0  (MCA1.R0 / .R0LO / .R0HI / .R0NM)
 # ------------------------------------------------------------------
-record(ai, "$(P):$(D):MCA1.R0")
+record(ai, "$(P):$(D):MCA1_R0")
 {
     field(DTYP, "pydev")
     field(INP,  "@mca_get_roi_counts(0)")
     field(SCAN, "Passive")
     field(PREC, "0")
 }
-record(longout, "$(P):$(D):MCA1.R0LO")
+alias("$(P):$(D):MCA1_R0",   "$(P):$(D):MCA1.R0")
+
+record(longout, "$(P):$(D):MCA1_R0LO")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_lo(0,VAL)")
     field(VAL,  "0")
     field(PINI, "YES")
 }
-record(longout, "$(P):$(D):MCA1.R0HI")
+alias("$(P):$(D):MCA1_R0LO", "$(P):$(D):MCA1.R0LO")
+
+record(longout, "$(P):$(D):MCA1_R0HI")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_hi(0,VAL)")
     field(VAL,  "0")
     field(PINI, "YES")
 }
-record(stringout, "$(P):$(D):MCA1.R0NM")
+alias("$(P):$(D):MCA1_R0HI", "$(P):$(D):MCA1.R0HI")
+
+record(stringout, "$(P):$(D):MCA1_R0NM")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_name(0,VAL)")
     field(VAL,  "ROI 0")
     field(PINI, "YES")
 }
+alias("$(P):$(D):MCA1_R0NM", "$(P):$(D):MCA1.R0NM")
 
 # ------------------------------------------------------------------
 # ROI 1
 # ------------------------------------------------------------------
-record(ai, "$(P):$(D):MCA1.R1")
+record(ai, "$(P):$(D):MCA1_R1")
 {
     field(DTYP, "pydev")
     field(INP,  "@mca_get_roi_counts(1)")
     field(SCAN, "Passive")
     field(PREC, "0")
 }
-record(longout, "$(P):$(D):MCA1.R1LO")
+alias("$(P):$(D):MCA1_R1",   "$(P):$(D):MCA1.R1")
+
+record(longout, "$(P):$(D):MCA1_R1LO")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_lo(1,VAL)")
     field(VAL,  "0")
     field(PINI, "YES")
 }
-record(longout, "$(P):$(D):MCA1.R1HI")
+alias("$(P):$(D):MCA1_R1LO", "$(P):$(D):MCA1.R1LO")
+
+record(longout, "$(P):$(D):MCA1_R1HI")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_hi(1,VAL)")
     field(VAL,  "0")
     field(PINI, "YES")
 }
-record(stringout, "$(P):$(D):MCA1.R1NM")
+alias("$(P):$(D):MCA1_R1HI", "$(P):$(D):MCA1.R1HI")
+
+record(stringout, "$(P):$(D):MCA1_R1NM")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_name(1,VAL)")
     field(VAL,  "ROI 1")
     field(PINI, "YES")
 }
+alias("$(P):$(D):MCA1_R1NM", "$(P):$(D):MCA1.R1NM")
 
 # ------------------------------------------------------------------
 # ROI 2
 # ------------------------------------------------------------------
-record(ai, "$(P):$(D):MCA1.R2")
+record(ai, "$(P):$(D):MCA1_R2")
 {
     field(DTYP, "pydev")
     field(INP,  "@mca_get_roi_counts(2)")
     field(SCAN, "Passive")
     field(PREC, "0")
 }
-record(longout, "$(P):$(D):MCA1.R2LO")
+alias("$(P):$(D):MCA1_R2",   "$(P):$(D):MCA1.R2")
+
+record(longout, "$(P):$(D):MCA1_R2LO")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_lo(2,VAL)")
     field(VAL,  "0")
     field(PINI, "YES")
 }
-record(longout, "$(P):$(D):MCA1.R2HI")
+alias("$(P):$(D):MCA1_R2LO", "$(P):$(D):MCA1.R2LO")
+
+record(longout, "$(P):$(D):MCA1_R2HI")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_hi(2,VAL)")
     field(VAL,  "0")
     field(PINI, "YES")
 }
-record(stringout, "$(P):$(D):MCA1.R2NM")
+alias("$(P):$(D):MCA1_R2HI", "$(P):$(D):MCA1.R2HI")
+
+record(stringout, "$(P):$(D):MCA1_R2NM")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_name(2,VAL)")
     field(VAL,  "ROI 2")
     field(PINI, "YES")
 }
+alias("$(P):$(D):MCA1_R2NM", "$(P):$(D):MCA1.R2NM")
 
 # ------------------------------------------------------------------
 # ROI 3
 # ------------------------------------------------------------------
-record(ai, "$(P):$(D):MCA1.R3")
+record(ai, "$(P):$(D):MCA1_R3")
 {
     field(DTYP, "pydev")
     field(INP,  "@mca_get_roi_counts(3)")
     field(SCAN, "Passive")
     field(PREC, "0")
 }
-record(longout, "$(P):$(D):MCA1.R3LO")
+alias("$(P):$(D):MCA1_R3",   "$(P):$(D):MCA1.R3")
+
+record(longout, "$(P):$(D):MCA1_R3LO")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_lo(3,VAL)")
     field(VAL,  "0")
     field(PINI, "YES")
 }
-record(longout, "$(P):$(D):MCA1.R3HI")
+alias("$(P):$(D):MCA1_R3LO", "$(P):$(D):MCA1.R3LO")
+
+record(longout, "$(P):$(D):MCA1_R3HI")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_hi(3,VAL)")
     field(VAL,  "0")
     field(PINI, "YES")
 }
-record(stringout, "$(P):$(D):MCA1.R3NM")
+alias("$(P):$(D):MCA1_R3HI", "$(P):$(D):MCA1.R3HI")
+
+record(stringout, "$(P):$(D):MCA1_R3NM")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_name(3,VAL)")
     field(VAL,  "ROI 3")
     field(PINI, "YES")
 }
+alias("$(P):$(D):MCA1_R3NM", "$(P):$(D):MCA1.R3NM")
 
 # ------------------------------------------------------------------
 # ROI 4
 # ------------------------------------------------------------------
-record(ai, "$(P):$(D):MCA1.R4")
+record(ai, "$(P):$(D):MCA1_R4")
 {
     field(DTYP, "pydev")
     field(INP,  "@mca_get_roi_counts(4)")
     field(SCAN, "Passive")
     field(PREC, "0")
 }
-record(longout, "$(P):$(D):MCA1.R4LO")
+alias("$(P):$(D):MCA1_R4",   "$(P):$(D):MCA1.R4")
+
+record(longout, "$(P):$(D):MCA1_R4LO")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_lo(4,VAL)")
     field(VAL,  "0")
     field(PINI, "YES")
 }
-record(longout, "$(P):$(D):MCA1.R4HI")
+alias("$(P):$(D):MCA1_R4LO", "$(P):$(D):MCA1.R4LO")
+
+record(longout, "$(P):$(D):MCA1_R4HI")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_hi(4,VAL)")
     field(VAL,  "0")
     field(PINI, "YES")
 }
-record(stringout, "$(P):$(D):MCA1.R4NM")
+alias("$(P):$(D):MCA1_R4HI", "$(P):$(D):MCA1.R4HI")
+
+record(stringout, "$(P):$(D):MCA1_R4NM")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_name(4,VAL)")
     field(VAL,  "ROI 4")
     field(PINI, "YES")
 }
+alias("$(P):$(D):MCA1_R4NM", "$(P):$(D):MCA1.R4NM")
 
 # ------------------------------------------------------------------
 # ROI 5
 # ------------------------------------------------------------------
-record(ai, "$(P):$(D):MCA1.R5")
+record(ai, "$(P):$(D):MCA1_R5")
 {
     field(DTYP, "pydev")
     field(INP,  "@mca_get_roi_counts(5)")
     field(SCAN, "Passive")
     field(PREC, "0")
 }
-record(longout, "$(P):$(D):MCA1.R5LO")
+alias("$(P):$(D):MCA1_R5",   "$(P):$(D):MCA1.R5")
+
+record(longout, "$(P):$(D):MCA1_R5LO")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_lo(5,VAL)")
     field(VAL,  "0")
     field(PINI, "YES")
 }
-record(longout, "$(P):$(D):MCA1.R5HI")
+alias("$(P):$(D):MCA1_R5LO", "$(P):$(D):MCA1.R5LO")
+
+record(longout, "$(P):$(D):MCA1_R5HI")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_hi(5,VAL)")
     field(VAL,  "0")
     field(PINI, "YES")
 }
-record(stringout, "$(P):$(D):MCA1.R5NM")
+alias("$(P):$(D):MCA1_R5HI", "$(P):$(D):MCA1.R5HI")
+
+record(stringout, "$(P):$(D):MCA1_R5NM")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_name(5,VAL)")
     field(VAL,  "ROI 5")
     field(PINI, "YES")
 }
+alias("$(P):$(D):MCA1_R5NM", "$(P):$(D):MCA1.R5NM")
 
 # ------------------------------------------------------------------
 # ROI 6
 # ------------------------------------------------------------------
-record(ai, "$(P):$(D):MCA1.R6")
+record(ai, "$(P):$(D):MCA1_R6")
 {
     field(DTYP, "pydev")
     field(INP,  "@mca_get_roi_counts(6)")
     field(SCAN, "Passive")
     field(PREC, "0")
 }
-record(longout, "$(P):$(D):MCA1.R6LO")
+alias("$(P):$(D):MCA1_R6",   "$(P):$(D):MCA1.R6")
+
+record(longout, "$(P):$(D):MCA1_R6LO")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_lo(6,VAL)")
     field(VAL,  "0")
     field(PINI, "YES")
 }
-record(longout, "$(P):$(D):MCA1.R6HI")
+alias("$(P):$(D):MCA1_R6LO", "$(P):$(D):MCA1.R6LO")
+
+record(longout, "$(P):$(D):MCA1_R6HI")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_hi(6,VAL)")
     field(VAL,  "0")
     field(PINI, "YES")
 }
-record(stringout, "$(P):$(D):MCA1.R6NM")
+alias("$(P):$(D):MCA1_R6HI", "$(P):$(D):MCA1.R6HI")
+
+record(stringout, "$(P):$(D):MCA1_R6NM")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_name(6,VAL)")
     field(VAL,  "ROI 6")
     field(PINI, "YES")
 }
+alias("$(P):$(D):MCA1_R6NM", "$(P):$(D):MCA1.R6NM")
 
 # ------------------------------------------------------------------
 # ROI 7
 # ------------------------------------------------------------------
-record(ai, "$(P):$(D):MCA1.R7")
+record(ai, "$(P):$(D):MCA1_R7")
 {
     field(DTYP, "pydev")
     field(INP,  "@mca_get_roi_counts(7)")
     field(SCAN, "Passive")
     field(PREC, "0")
 }
-record(longout, "$(P):$(D):MCA1.R7LO")
+alias("$(P):$(D):MCA1_R7",   "$(P):$(D):MCA1.R7")
+
+record(longout, "$(P):$(D):MCA1_R7LO")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_lo(7,VAL)")
     field(VAL,  "0")
     field(PINI, "YES")
 }
-record(longout, "$(P):$(D):MCA1.R7HI")
+alias("$(P):$(D):MCA1_R7LO", "$(P):$(D):MCA1.R7LO")
+
+record(longout, "$(P):$(D):MCA1_R7HI")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_hi(7,VAL)")
     field(VAL,  "0")
     field(PINI, "YES")
 }
-record(stringout, "$(P):$(D):MCA1.R7NM")
+alias("$(P):$(D):MCA1_R7HI", "$(P):$(D):MCA1.R7HI")
+
+record(stringout, "$(P):$(D):MCA1_R7NM")
 {
     field(DTYP, "pydev")
     field(OUT,  "@mca_set_roi_name(7,VAL)")
     field(VAL,  "ROI 7")
     field(PINI, "YES")
 }
+alias("$(P):$(D):MCA1_R7NM", "$(P):$(D):MCA1.R7NM")
